@@ -1,3 +1,44 @@
+function runPythonScript() {
+  console.log( 'started AJAX' );    
+
+  // Make an AJAX request to your Python script on the server.
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/run_python_script', true);
+
+  xhr.onload = function () {
+      if (xhr.status === 200) {
+          console.log('success');
+      } else {
+          console.error('Error');
+      }
+  };
+
+  xhr.send();
+}
+
+function clearElement(elementID)
+{
+  document.getElementById(elementID).innerHTML = "Speak out your order and click on Stop once you're finished!";
+  //document.getElementById(elementID).innerHTML = "Please wait while AI interprets your order ...";
+}
+
+function clearWaitElement(elementID)
+{
+  document.getElementById(elementID).innerHTML = "Please wait while AI interprets your order ...";
+}
+
+function runScriptAndLoadHTMLIntoElement(url, elementId) {
+  fetch(url)
+      .then(response => response.text())
+      .then(html => {
+          // Insert the loaded HTML into the specified element
+          document.getElementById(elementId).innerHTML = html;
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
+}
+
 async function client() {
   try {
     const buttonStart = document.querySelector('#buttonStart')
@@ -28,6 +69,9 @@ async function client() {
     audioRecorder.connect(audioContext.destination)
 
     buttonStart.addEventListener('click', event => {
+
+      clearElement('content-placeholder')
+
       buttonStart.setAttribute('disabled', 'disabled')
       buttonStop.removeAttribute('disabled')
 
@@ -38,6 +82,7 @@ async function client() {
     })
 
     buttonStop.addEventListener('click', async event => {
+      clearWaitElement('content-placeholder')
 
       buttonStop.setAttribute('disabled', 'disabled')
       buttonStart.removeAttribute('disabled')
@@ -56,6 +101,8 @@ async function client() {
       } catch (err) {
         console.error("Error uploading audio:", err);
       }
+
+      runScriptAndLoadHTMLIntoElement('/run_python_script', 'content-placeholder')
 
     })
   } catch (err) {

@@ -3,103 +3,101 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Text Display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEST</title>
+  <link rel="shortcut icon" href="#" />
   <style>
-      body {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
-      }
-      #text {
-          font-size: 60px;
-          text-align: center;
-          line-height: 1.5;
-          /* Define a gradient background for the text */
-          background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-      }
-      #text2 {
-          font-size: 60px;
-          text-align: center;
-          line-height: 1.5;
-          /* Define a gradient background for the text */
-          background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-      }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #text {
+      font-size: 60px;
+      text-align: center;
+      line-height: 1.5;
+      /* Define a gradient background for the text */
+      background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    #text2 {
+      font-size: 60px;
+      text-align: center;
+      line-height: 1.5;
+      /* Define a gradient background for the text */
+      background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
   </style>
 </head>
+
 <body>
   <div id="content">
-      <p id="text"></p>
-      <p id="text2"></p>
+    <p id="text"></p>
+    <p id="text2"></p>
 
   </div>
 
   <script>
-      const textToDisplay = "Hi, I am your bartender today!";
-      const textToDisplay2 = "What do you like to drink?";
-      const contentDiv = document.getElementById('content');
-      const textElement = document.getElementById('text');
-      const textElement2 = document.getElementById('text2');
+    const textToDisplay = "Hi, I am your bartender today!";
+    const textToDisplay2 = "What do you like to drink?";
+    const contentDiv = document.getElementById('content');
+    const textElement = document.getElementById('text');
+    const textElement2 = document.getElementById('text2');
 
 
-      // Split the text into words
-      const words = textToDisplay.split(' ');
-      const words2 = textToDisplay2.split(' ');
+    // Split the text into words
+    const words = textToDisplay.split(' ');
+    const words2 = textToDisplay2.split(' ');
 
-      let currentIndex = 0;
-      let currentIndex2 = 0;
+    let currentIndex = 0;
+    let currentIndex2 = 0;
 
 
-      // Function to display words one by one
-      function displayWords() {
-          if (currentIndex < words.length) {
-              textElement.textContent += words[currentIndex] + ' ';
-              currentIndex++;
-              setTimeout(displayWords, 50); // Adjust the delay (in milliseconds) between words
-          }
-      }        
-      
-      function displayWords2() {
-          if (currentIndex2 < words2.length) {
-              textElement2.textContent += words2[currentIndex2] + ' ';
-              currentIndex2++;
-              setTimeout(displayWords2, 50); // Adjust the delay (in milliseconds) between words
-          }
+    // Function to display words one by one
+    function displayWords() {
+      if (currentIndex < words.length) {
+        textElement.textContent += words[currentIndex] + ' ';
+        currentIndex++;
+        setTimeout(displayWords, 50); // Adjust the delay (in milliseconds) between words
       }
+    }
 
-      // Start displaying words when the page loads
-      window.addEventListener('load', () => {
-          displayWords();
-          setTimeout(displayWords2, 1000);
-          
-      });
+    function displayWords2() {
+      if (currentIndex2 < words2.length) {
+        textElement2.textContent += words2[currentIndex2] + ' ';
+        currentIndex2++;
+        setTimeout(displayWords2, 50); // Adjust the delay (in milliseconds) between words
+      }
+    }
+
+    // Start displaying words when the page loads
+    window.addEventListener('load', () => {
+      displayWords();
+      setTimeout(displayWords2, 1000);
+
+    });
   </script>
-</body> 
+  <div>
+    <button type="button" id="buttonStart">Start</button>
+    <button type="button" id="buttonStop" disabled>Stop</button>
+  </div>
+  <div>
+    <audio controls id="audio"></audio>
+  </div>
+  <div id="content-placeholder"></div>
+  <script src="encode-audio.js"></script>
+  <script src="client.js"></script>
+  <script src="upload-audio.js"></script>
+</body>
 
-<!--   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST</title>
-    <link rel="shortcut icon" href="#" />
-  </head> -->
-  <body>
-    <div>
-      <button type="button" id="buttonStart">Start</button>
-      <button type="button" id="buttonStop" disabled>Stop</button>
-    </div>
-    <div>
-      <audio controls id="audio"></audio>
-    </div>
-    <script src="encode-audio.js"></script>
-    <script src="client.js"></script>
-    <script src="upload-audio.js"></script>
-  </body>
 </html>
