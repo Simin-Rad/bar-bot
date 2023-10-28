@@ -5,6 +5,10 @@ const handleAudio = require('./audio-handler.js');
 
 const app = express();
 const port = 8000;
+const hostname = "::";
+
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -28,6 +32,6 @@ app.post('/upload', upload.single('audio'), (req, res) => {
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port, () => {
+app.listen(port, hostname, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
