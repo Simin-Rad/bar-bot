@@ -1,4 +1,4 @@
-async function uploadAudio(blob) {
+async function uploadAudioToServer(blob) {
     const formData = new FormData();
     formData.append('audio', blob, 'recordedAudio.wav'); // You can specify a filename if needed
 

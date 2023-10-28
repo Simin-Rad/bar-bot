@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const handleAudio = require('./audio-handler.js');
 
 const app = express();
 const port = 8000;
@@ -14,11 +15,16 @@ app.post('/upload', upload.single('audio'), (req, res) => {
     }
 
     const audioBlob = req.file.buffer;
-    // You can now save the audioBlob to a database, file system, etc.
 
-    res.json({ message: 'Audio uploaded successfully' });
+    try {
+        handleAudio(audioBlob, req.file.originalname);
+        res.json({ message: 'Audio uploaded and saved successfully' });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Server error');
+    }
 });
-
+    
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
