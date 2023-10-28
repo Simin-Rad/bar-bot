@@ -6,9 +6,19 @@
 
 import openai
 import sys
+import configparser
+
+config = configparser.ConfigParser()
+with open('.env', 'r') as f:
+    config_string = '[dummy_section]\n' + f.read()
+
+config.read_string(config_string)
+
+key = config['dummy_section']['api_key']
+#print (key, file=sys.stderr)
 
 def interface_AI(output_text_result):
-    openai.api_key = "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"
+    openai.api_key = key
     #todo define size "default"
     #todo define number"default"
     drink_size_list = "[small, medium, large, double shot]"

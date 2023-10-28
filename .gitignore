@@ -2,3 +2,4 @@
 /package-lock.json
 uploads
 __pycache__/
+*bundle.js

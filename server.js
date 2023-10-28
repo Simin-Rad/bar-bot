@@ -1,12 +1,17 @@
 const express = require('express');
 const multer = require('multer');
 const { exec } = require('child_process');
+require('dotenv').config();
+
 const path = require('path');
 const handleAudio = require('./audio-handler.js');
 
 const app = express();
-const port = 8000;
 const hostname = "::";
+const port =  process.env.port;
+const redirection_path = process.env.redirection_path
+const root_path = process.env.root_path
+const api_key = process.env.api_key
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -35,7 +40,7 @@ app.get('/run_python_script', (req, res) => {
     try {
         console.info(`input: ${req}`)
         // Replace '/path/to/your_script.py' with the actual path to your Python script.
-        exec('python /Users/simin/dokumente/master/3.Semester/bar-bot/ai_backend.py', (error, stdout, stderr) => {
+        exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error executing Python script: ${stderr}`);
                 res.status(500).send(`Error executing Python script: ${stderr}`);
@@ -54,5 +59,9 @@ app.get('/run_python_script', (req, res) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port, hostname, () => {
-    console.log(`Server running at http://localhost:${port}/`);
+    console.info(`port: ${port}`);
+    console.info(`redirection_path: ${redirection_path}`);
+    console.info(`root_path: ${root_path}`);
+    console.info(`api_key: ${api_key}`);
+    console.info(`Server running at http://${hostname}:${port}/`);
 });

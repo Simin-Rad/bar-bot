@@ -4,11 +4,25 @@ import module_bot_mock
 import os
 import sys
 
+import configparser
+
+
+
 def trigger():
+
+    config = configparser.ConfigParser()
+    with open('.env', 'r') as f:
+        config_string = '[dummy_section]\n' + f.read()
+
+    config.read_string(config_string)
+
+    root_path = config['dummy_section']['root_path']
+    #print (root_path, file=sys.stderr)
            
     # Create the full path to the selected .wav file
     #wav_file_path = "/home/students/ga46pul/p-course/bar-bot/uploads/recordedAudio.wav"
-    wav_file_path = "/Users/simin/dokumente/master/3.Semester/bar-bot/uploads/recordedAudio.wav"
+    wav_file_path = os.path.join (root_path, "uploads/recordedAudio.wav")
+    #print (wav_file_path, file=sys.stderr)
 
     sound = wav_file_path
     
