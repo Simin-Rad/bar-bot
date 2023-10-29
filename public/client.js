@@ -18,7 +18,7 @@ function runPythonScript() {
 
 function clearElement(elementID)
 {
-  document.getElementById(elementID).innerHTML = "Speak out your order and click on Stop once you're finished!";
+  //document.getElementById(elementID).innerHTML = "Speak out your order and click on Stop once you're finished!";
   //document.getElementById(elementID).innerHTML = "Please wait while AI interprets your order ...";
 }
 
@@ -86,7 +86,7 @@ async function client() {
 
     buttonStart.addEventListener('click', event => {
 
-      clearElement('content-placeholder')
+      //clearElement('content-placeholder')
 
       buttonStart.setAttribute('disabled', 'disabled')
       buttonStop.removeAttribute('disabled')

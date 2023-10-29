@@ -17,7 +17,7 @@
     }
 
     #text {
-      font-size: 60px;
+      font-size: 40px;
       text-align: center;
       line-height: 1.5;
       /* Define a gradient background for the text */
@@ -28,7 +28,18 @@
     }
 
     #text2 {
-      font-size: 60px;
+      font-size: 40px;
+      text-align: center;
+      line-height: 1.5;
+      /* Define a gradient background for the text */
+      background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    #text3 {
+      font-size: 40px;
       text-align: center;
       line-height: 1.5;
       /* Define a gradient background for the text */
@@ -44,24 +55,26 @@
   <div id="content">
     <p id="text"></p>
     <p id="text2"></p>
-
+    <p id="text3"></p>
   </div>
 
   <script>
     const textToDisplay = "Hi, I am your bartender today!";
-    const textToDisplay2 = "What do you like to drink?";
+    const textToDisplay2 = "What do you like to drink? ";
+    const textToDisplay3 = "Please speak out your order by clicking on Start, and click on Stop once you're finished!";
     const contentDiv = document.getElementById('content');
     const textElement = document.getElementById('text');
     const textElement2 = document.getElementById('text2');
-
+    const textElement3 = document.getElementById('text3');
 
     // Split the text into words
     const words = textToDisplay.split(' ');
     const words2 = textToDisplay2.split(' ');
+    const words3 = textToDisplay3.split(' ');
 
     let currentIndex = 0;
     let currentIndex2 = 0;
-
+    let currentIndex3 = 0;
 
     // Function to display words one by one
     function displayWords() {
@@ -86,6 +99,22 @@
       setTimeout(displayWords2, 1000);
 
     });
+
+    function displayWords3() {
+      if (currentIndex3 < words3.length) {
+        textElement3.textContent += words3[currentIndex3] + ' ';
+        currentIndex3++;
+        setTimeout(displayWords3, 50); // Adjust the delay (in milliseconds) between words
+      }
+    }
+
+    // Start displaying words when the page loads
+    window.addEventListener('load', () => {
+      displayWords();
+      setTimeout(displayWords3, 2000);
+
+    });
+
   </script>
   <div>
     <button type="button" id="buttonStart">Start</button>
