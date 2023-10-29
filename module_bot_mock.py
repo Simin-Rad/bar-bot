@@ -1,16 +1,15 @@
 import json
 
-def robot_do_prepare_drinks (order_string):
-    order = json.loads(order_string)
+def robot_do_prepare_drinks (ai_reply_order_json):
+    order_dictionary = json.loads(ai_reply_order_json)
     #print ("Cocktail maker robot: I am preparing the drink:")
-    print ("preparing " + str(order["number"]) + " " + order["size"] + " " + order["name"])
+    print ("preparing " + str(order_dictionary["number"]) + " " + order_dictionary["size"] + " " + order_dictionary["name"])
     #print ("It takes 5 minutes:")
     #print ("Ok, done!")
 
-def interface_bot_mock(output_order):
-    # todo get the order from response of openai
-    #ai_reply = "{\"name\":\"Mojito\",\"size\":\"small\",\"number\":1}"
-    robot_do_prepare_drinks (output_order)
+def interface_bot_mock(ai_reply_order_json):
+    robot_do_prepare_drinks (ai_reply_order_json)
 
 if __name__ == "__main__":
-    interface_bot_mock()
+    ai_reply_order_json = "{\"name\":\"Mojito\",\"size\":\"small\",\"number\":1}"
+    interface_bot_mock(ai_reply_order_json)

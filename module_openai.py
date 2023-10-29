@@ -13,24 +13,21 @@ with open('.env', 'r') as f:
     config_string = '[dummy_section]\n' + f.read()
 
 config.read_string(config_string)
-
 key = config['dummy_section']['api_key']
 #print (key, file=sys.stderr)
 
-def interface_AI(output_text_result):
+def interface_openai(input_text):
     openai.api_key = key
     #todo define size "default"
     #todo define number"default"
     drink_size_list = "[small, medium, large, double shot]"
     drink_name_list = "[cola, gin, tonic, vodka, Mojito, Margarita, Cosmopolitan, Old Fashioned, Martini, Daiquiri, Piña Colada, Mai Tai, Moscow Mule, Long Island Iced Tea, Negroni, Bloody Mary, Manhattan, White Russian, Caipirinha, Whiskey Sour, Sex on the Beach, Tequila Sunrise, Espresso Martini, Tom Collins, Lager, IPA, Stout, Pilsner, Wheat Beer, Pale Ale, Saison, Porter, Belgian Tripel, Gose, Mojito, Margarita, Cosmopolitan, Old Fashioned, Martini, Daiquiri, Piña Colada, Mai Tai, Moscow Mule, Long Island Iced Tea]"
 
-    # order_said = "Hi, bartender bot, how are you doing today? I am having a lot of fun today at the bar and I want to drink. I want to order a small mojito"
-
-    prompt = "What drink's name do you see in this sentence and the size and the number of the drinks if mentioned? " + output_text_result + "print the output in this order and in json format with following keys: name, size, number. name key represents representing the name of the drink. size key represents the size of drink. number key represents number of ordered drinks. size value is one of the following:" + drink_size_list + ". name of the drink is one of the following: " + drink_name_list+". Only send back the json string, nothing else."
+    prompt = "What drink's name do you see in this sentence and the size and the number of the drinks if mentioned? " + input_text + "print the output in this order and in json format with following keys: name, size, number. name key represents representing the name of the drink. size key represents the size of drink. number key represents number of ordered drinks. size value is one of the following:" + drink_size_list + ". name of the drink is one of the following: " + drink_name_list+". Only send back the json string, nothing else."
 
     # Make the API call
     completion = openai.Completion.create(
-        engine="text-davinci-003",  # Choose an appropriate engine
+        engine="gpt-3.5-turbo-instruct",  # Choose an appropriate engine
         prompt=prompt,
         max_tokens=1024  # Adjust as needed
     )
@@ -45,4 +42,5 @@ def interface_AI(output_text_result):
     return output
 
 if __name__ == "__main__":
-    interface_AI()
+    input_test = "I want to order one small glass of Coca-Cola!"
+    interface_openai(input_test)
