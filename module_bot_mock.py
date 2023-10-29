@@ -1,11 +1,12 @@
 import json
 
 def robot_do_prepare_drinks (ai_reply_order_json):
-    order_dictionary = json.loads(ai_reply_order_json)
-    #print ("Cocktail maker robot: I am preparing the drink:")
-    print ("preparing " + str(order_dictionary["number"]) + " " + order_dictionary["size"] + " " + order_dictionary["name"])
-    #print ("It takes 5 minutes:")
-    #print ("Ok, done!")
+    try: 
+        order_dictionary = json.loads(ai_reply_order_json)
+        print ("preparing " + str(order_dictionary["number"]) + " " + order_dictionary["size"] + " " + order_dictionary["name"])
+    except ValueError as e:
+        print ("sorry, I did not catch your order, will you try again?")
+        return
 
 def interface_bot_mock(ai_reply_order_json):
     robot_do_prepare_drinks (ai_reply_order_json)
