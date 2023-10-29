@@ -48,6 +48,22 @@
       background-clip: text;
       color: transparent;
     }
+
+    .text4 {
+      font-size: 40px;
+      text-align: center;
+      line-height: 1.5;
+      /* Define a gradient background for the text */
+      background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+    }
   </style>
 </head>
 
@@ -120,10 +136,27 @@
     <button type="button" id="buttonStart">Start</button>
     <button type="button" id="buttonStop" disabled>Stop</button>
   </div>
+
   <div>
+    <a id="content-placeholder" class="text4">
+      <br>
+    </a>
+  </div>
+
+  <div >
+    <br>
+    <br>
+  </div>
+
+  <div class="footer">
+    <a>
+      You can clock on the play bottom to see what I heard!
+    </a>
+    <br>
     <audio controls id="audio"></audio>
   </div>
-  <div id="content-placeholder"></div>
+
+
   <script src="encode-audio.js"></script>
   <script src="client_bundle.js"></script>
 </body>
