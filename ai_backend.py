@@ -54,4 +54,5 @@ def trigger():
     #print(f"Input: {output_order}, Output: {output_order}")
 
 if __name__ == "__main__":
-    trigger()
+    for i in range (10):
+        trigger()

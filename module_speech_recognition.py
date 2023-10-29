@@ -38,6 +38,8 @@ if __name__ == "__main__":
     #print (root_path, file=sys.stderr)
            
     # Create the full path to the selected .wav file
-    sound = os.path.join (root_path, "uploads/recordedAudio.wav")
+    sound = os.path.join (root_path, "test_data/recordedAudio1.wav")
+    interface_audio(sound)
 
+    sound = os.path.join (root_path, "test_data/recordedAudio2.wav")
     interface_audio(sound)

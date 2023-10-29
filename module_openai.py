@@ -42,5 +42,8 @@ def interface_openai(input_text):
     return output
 
 if __name__ == "__main__":
-    input_text = "I want to order one small glass of Coca-Cola!"
-    interface_openai(input_text)
+    input_text1 = "I want to order one small glass of Coca-Cola!"
+    interface_openai(input_text1)
+
+    input_text2 = "I want to order one small glass of Coca-Cola!"
+    interface_openai(input_text2)
