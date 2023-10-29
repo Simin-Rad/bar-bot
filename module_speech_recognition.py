@@ -7,6 +7,9 @@
 
 import speech_recognition as sr
 import sys
+import os
+import configparser
+
 
 def interface_audio(sound):
 
@@ -26,5 +29,15 @@ def interface_audio(sound):
 
     return text
 
-if __name__ == "__main__":
-    interface_audio()
+if __name__ == "__main__":    
+    config = configparser.ConfigParser()
+    with open('.env', 'r') as f:
+        config_string = '[dummy_section]\n' + f.read()
+    config.read_string(config_string)
+    root_path = config['dummy_section']['root_path']
+    #print (root_path, file=sys.stderr)
+           
+    # Create the full path to the selected .wav file
+    sound = os.path.join (root_path, "uploads/recordedAudio.wav")
+
+    interface_audio(sound)
