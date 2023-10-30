@@ -17,3 +17,8 @@ npx webpack --config webpack.config.js
 ```bash
 npm run dev
 ```
+
+# deploy
+```bash
+npx http-server -c-1
+```
