@@ -55,6 +55,26 @@ app.get('/run_python_script', (req, res) => {
     }
 });
 
+
+app.get('/test', (req, res) => {
+    // Run your Python script when the endpoint is accessed.
+    try {
+
+
+    var jsonData = {
+        "foo": 1,
+        "bar": 2
+    };
+    res.send (jsonData)
+    } catch (e) {
+	            console.error(`Error: ${e.message}`);
+	            res.status(500).send(`Error: ${e.message}`);
+    }
+});
+
+
+
+
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
