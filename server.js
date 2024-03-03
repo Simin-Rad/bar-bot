@@ -8,7 +8,7 @@ const handleAudio = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
-const port =  process.env.port;
+const port = process.env.port;
 const redirection_path = process.env.redirection_path
 const root_path = process.env.root_path
 const api_key = process.env.api_key
@@ -39,50 +39,50 @@ app.post('/upload', upload.single('audio'), (req, res) => {
         res.status(500).send('Server error');
     }
 });
-   
+
 app.get('/run_python_script', (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
         console.info(`input: ${req}`)
 
-    	// Access the headers from the req object
-	const headers = req.headers;
-	// Convert headers to a JSON string with indentation
-	const formattedHeaders = JSON.stringify(headers, null, 2);
-	// Print the headers to the console
-	console.log("Headers:", formattedHeaders);
+        // Access the headers from the req object
+        const headers = req.headers;
+        // Convert headers to a JSON string with indentation
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        // Print the headers to the console
+        console.log("Headers:", formattedHeaders);
 
         // Replace '/path/to/your_script.py' with the actual path to your Python script.
         exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
             if (error) {
-				const payload = {
-					    success: 'false'
-				};
-			        axios.put(callbacks.run_callback, payload)
-				        .then(response => {
-						        console.log('PUT request successful:', response.data);
-						    })
-				        .catch(error => {
-						        console.error('Error making PUT request:', error.message);
-						    });
+                const payload = {
+                    success: 'false'
+                };
+                axios.put(callbacks.run_callback, payload)
+                    .then(response => {
+                        console.log('PUT request successful:', response.data);
+                    })
+                    .catch(error => {
+                        console.error('Error making PUT request:', error.message);
+                    });
 
 
 
-		    console.error(`Error executing Python script: ${stderr}`);
+                console.error(`Error executing Python script: ${stderr}`);
                 res.status(500).send(`Error executing Python script: ${stderr}`);
                 return;
             }
             console.log('Python script executed successfully');
-				const payload = {
-					    success: 'true'
-				};
-			        axios.put(callbacks.run_callback, payload)
-				        .then(response => {
-						        console.log('PUT request successful:', response.data);
-						    })
-				        .catch(error => {
-						        console.error('Error making PUT request:', error.message);
-						    });
+            const payload = {
+                success: 'true'
+            };
+            axios.put(callbacks.run_callback, payload)
+                .then(response => {
+                    console.log('PUT request successful:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error making PUT request:', error.message);
+                });
 
 
             res.send(stdout);
@@ -98,26 +98,26 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
 
-	// Access the headers from the req object
-	const headers = req.headers;
-	// Convert headers to a JSON string with indentation
-	const formattedHeaders = JSON.stringify(headers, null, 2);
-	// Print the headers to the console
-	console.log("Headers:", formattedHeaders);
+        // Access the headers from the req object
+        const headers = req.headers;
+        // Convert headers to a JSON string with indentation
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        // Print the headers to the console
+        console.log("Headers:", formattedHeaders);
 
-	callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
-	console.log("run_callback:", callbacks.run_callback);
+        callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
+        console.log("run_callback:", callbacks.run_callback);
 
-	var jsonData = {
+        var jsonData = {
             "foo": 1,
             "bar": 2
         };
         res.setHeader('CPEE-CALLBACK', 'true');
-        res.send (jsonData)
+        res.send(jsonData)
 
     } catch (e) {
-	            console.error(`Error: ${e.message}`);
-	            res.status(500).send(`Error: ${e.message}`);
+        console.error(`Error: ${e.message}`);
+        res.status(500).send(`Error: ${e.message}`);
     }
 });
 
