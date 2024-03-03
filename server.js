@@ -21,7 +21,10 @@ const axios = require('axios');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const callbacks = {};
+const callbacks = {
+    run_callback: undefined,
+    run_callback_promise: null,
+};
 
 
 app.post('/upload', upload.single('audio'), (req, res) => {
@@ -40,7 +43,7 @@ app.post('/upload', upload.single('audio'), (req, res) => {
     }
 });
 
-app.get('/run_python_script', (req, res) => {
+app.get('/run_python_script', async (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
         console.info(`input: ${req}`)
@@ -51,6 +54,17 @@ app.get('/run_python_script', (req, res) => {
         const formattedHeaders = JSON.stringify(headers, null, 2);
         // Print the headers to the console
         console.log("Headers:", formattedHeaders);
+
+        // Create a new promise if it doesn't exist yet
+        if (!callbacks.run_callback_promise) {
+            callbacks.run_callback_promise = {};
+            callbacks.run_callback_promise.promise = new Promise((resolve) => {
+                callbacks.run_callback_promise.resolve = resolve;
+            });
+        }
+
+        // Wait for the promise to be resolved before proceeding
+        await callbacks.run_callback_promise.promise;
 
         // Replace '/path/to/your_script.py' with the actual path to your Python script.
         exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
@@ -106,6 +120,11 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
         console.log("Headers:", formattedHeaders);
 
         callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
+        // Resolve the promise when the variable is set
+        if (callbacks.run_callback_promise) {
+            callbacks.run_callback_promise.resolve();
+        }
+
         console.log("run_callback:", callbacks.run_callback);
 
         var jsonData = {
