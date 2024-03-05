@@ -23,13 +23,12 @@ const upload = multer({ storage: storage });
 
 const callbacks = {
     run_callback: undefined,
-    //run_callback_promise: {},
-    //run_callback_promise: { promise: null },
     run_callback_is_set: false,
+    upload_callback: undefined,
+    upload_callback_is_set: false,
 };
 
-
-app.post('/upload', upload.single('audio'), (req, res) => {
+app.post('/upload', upload.single('audio'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No audio uploaded');
     }
@@ -37,11 +36,67 @@ app.post('/upload', upload.single('audio'), (req, res) => {
     const audioBlob = req.file.buffer;
 
     try {
+        // Log the headers (if needed)
+        const headers = req.headers;
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        console.log("Headers:", formattedHeaders);
+
+        // Wait for the signal (if needed)
+        while (!callbacks.upload_callback_is_set) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        callbacks.upload_callback_is_set = false;
+
+        // Handle the audio (e.g., save it)
         handleAudio(audioBlob, req.file.originalname);
+
+
+        // Send a callback request
+        const payload = {
+            success: 'true'
+        };
+        axios.put(callbacks.upload_callback, payload)
+            .then(response => {
+                console.log('PUT request successful:', response.data);
+            })
+            .catch(error => {
+                console.error('Error making PUT request:', error.message);
+            });
+        // Respond for successful audio upload
+
         res.json({ message: 'Audio uploaded and saved successfully' });
     } catch (err) {
         console.error('Error:', err);
         res.status(500).send('Server error');
+    }
+});
+
+
+app.get('/cpee_interface_upload', upload.single('audio'), (req, res) => {
+    // Run your Python script when the endpoint is accessed.
+    try {
+
+        // Access the headers from the req object
+        const headers = req.headers;
+        // Convert headers to a JSON string with indentation
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        // Print the headers to the console
+        console.log("Headers:", formattedHeaders);
+
+        callbacks.upload_callback = req.headers['cpee-callback']; // only works from cpee
+        console.log("upload_callback:", callbacks.upload_callback);
+        callbacks.upload_callback_is_set = true;
+
+        var jsonData = {
+            "foo": 1,
+            "bar": 2
+        };
+        res.setHeader('CPEE-CALLBACK', 'true');
+        res.send(jsonData)
+
+    } catch (e) {
+        console.error(`Error: ${e.message}`);
+        res.status(500).send(`Error: ${e.message}`);
     }
 });
 
@@ -59,10 +114,10 @@ app.get('/run_python_script', async (req, res) => {
 
         // Wait for the promise to be resolved before proceeding
         //await callbacks.run_callback_promise.promise;
-    	while (!callbacks.run_callback_is_set) {
-		await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
-	}
-	callbacks.run_callback_is_set=false;
+        while (!callbacks.run_callback_is_set) {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
+        }
+        callbacks.run_callback_is_set = false;
 
         // Replace '/path/to/your_script.py' with the actual path to your Python script.
         exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
@@ -117,25 +172,8 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
         console.log("Headers:", formattedHeaders);
 
         callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
-         // Create a new promise if it doesn't exist yet
-	/*
-        if (!callbacks.run_callback_promise) {
-            callbacks.run_callback_promise = {};
-            callbacks.run_callback_promise.promise = new Promise((resolve) => {
-                callbacks.run_callback_promise.resolve = resolve;
-            });
-        }
-	*/
-	//callbacks.run_callback_promise.promise = Promise.resolve();
-        /*
-	callbacks.run_callback_promise.promise = new Promise((resolve) => {
-	        callbacks.run_callback_promise.resolve = resolve;
-		}
-	);
-	callbacks.run_callback_promise.resolve();
-	*/
         console.log("run_callback:", callbacks.run_callback);
-	callbacks.run_callback_is_set = true;
+        callbacks.run_callback_is_set = true;
 
         var jsonData = {
             "foo": 1,
