@@ -4,7 +4,9 @@
     "description": "",
     "main": "client_bundle.js",
     "scripts": {
-        "dev": "node server.js"
+        "dev": "npm run start-upload-server && npm run start-run-ai-server",
+        "start-run-ai-server": "node run-ai-server.js", 
+        "start-upload-server": "node upload-server.js" 
     },
     "keywords": [],
     "author": "",
