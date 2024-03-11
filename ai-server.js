@@ -8,7 +8,7 @@ const handleAudio = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
-const port = process.env.port;
+const port_ai = process.env.port_ai;
 const redirection_path = process.env.redirection_path
 const root_path = process.env.root_path
 const api_key = process.env.api_key
@@ -117,10 +117,10 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port, hostname, () => {
-    console.info(`port: ${port}`);
+app.listen(port_ai, hostname, () => {
+    console.info(`port_ai: ${port_ai}`);
     console.info(`redirection_path: ${redirection_path}`);
     console.info(`root_path: ${root_path}`);
     console.info(`api_key: ${api_key}`);
-    console.info(`ai-server running at http://${hostname}:${port}/`);
+    console.info(`ai-server running at http://${hostname}:${port_ai}/`);
 });

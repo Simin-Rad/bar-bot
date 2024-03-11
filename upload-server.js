@@ -8,7 +8,7 @@ const handleAudio = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
-const port2 = process.env.port2;
+const port_upload = process.env.port_upload;
 const redirection_path2 = process.env.redirection_path2
 const root_path = process.env.root_path
 const api_key = process.env.api_key
@@ -101,10 +101,10 @@ app.get('/cpee_interface_upload', upload.single('audio'), (req, res) => {
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port2, hostname, () => {
-    console.info(`port: ${port2}`);
+app.listen(port_upload, hostname, () => {
+    console.info(`port: ${port_upload}`);
     console.info(`redirection_path: ${redirection_path2}`);
     console.info(`root_path: ${root_path}`);
     console.info(`api_key: ${api_key}`);
-    console.info(`upload-server running at http://${hostname}:${port2}/`);
+    console.info(`upload-server running at http://${hostname}:${port_upload}/`);
 });
