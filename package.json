@@ -4,7 +4,7 @@
     "description": "",
     "main": "client_bundle.js",
     "scripts": {
-        "run-ai-server": "node run-ai-server.js", 
+        "ai-server": "node ai-server.js", 
         "upload-server": "node upload-server.js" 
     },
     "keywords": [],

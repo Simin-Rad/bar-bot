@@ -122,5 +122,5 @@ app.listen(port, hostname, () => {
     console.info(`redirection_path: ${redirection_path}`);
     console.info(`root_path: ${root_path}`);
     console.info(`api_key: ${api_key}`);
-    console.info(`run-ai-server running at http://${hostname}:${port}/`);
+    console.info(`ai-server running at http://${hostname}:${port}/`);
 });
