@@ -98,7 +98,6 @@ async function client() {
     })
 
     buttonStop.addEventListener('click', async event => {
-      //console.log(env.redirection_path);
       clearWaitElement('content-placeholder')
 
       buttonStop.setAttribute('disabled', 'disabled')
