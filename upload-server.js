@@ -9,7 +9,7 @@ const handleAudio = require('./audio-handler.js');
 const app = express();
 const hostname = "::";
 const port2 = process.env.port2;
-const redirection_path = process.env.redirection_path
+const redirection_path2 = process.env.redirection_path2
 const root_path = process.env.root_path
 const api_key = process.env.api_key
 
