@@ -103,7 +103,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port2, hostname, () => {
     console.info(`port: ${port2}`);
-    console.info(`redirection_path: ${redirection_path}`);
+    console.info(`redirection_path: ${redirection_path2}`);
     console.info(`root_path: ${root_path}`);
     console.info(`api_key: ${api_key}`);
     console.info(`upload-server running at http://${hostname}:${port2}/`);
