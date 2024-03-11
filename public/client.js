@@ -43,7 +43,7 @@ async function uploadAudioToServer(blob) {
   const formData = new FormData();
   formData.append('audio', blob, 'recordedAudio.wav'); // You can specify a filename if needed
 
-  const response = await fetch(`${env.redirection_path}/upload`, {
+  const response = await fetch(`${env.redirection_path2}/upload`, {
       method: 'POST',
       body: formData
   });
