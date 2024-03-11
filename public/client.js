@@ -43,7 +43,7 @@ async function uploadAudioToServer(blob) {
   const formData = new FormData();
   formData.append('audio', blob, 'recordedAudio.wav'); // You can specify a filename if needed
 
-  const response = await fetch(`${env.redirection_path2}/upload`, {
+  const response = await fetch(`${env.redirection_path_upload}/upload`, {
       method: 'POST',
       body: formData
   });
@@ -98,7 +98,7 @@ async function client() {
     })
 
     buttonStop.addEventListener('click', async event => {
-      console.log(env.redirection_path);
+      //console.log(env.redirection_path);
       clearWaitElement('content-placeholder')
 
       buttonStop.setAttribute('disabled', 'disabled')
@@ -119,7 +119,7 @@ async function client() {
         console.error("Error uploading audio:", err);
       }
 
-      runScriptAndLoadHTMLIntoElement(`${env.redirection_path}/run_python_script`, 'content-placeholder')
+      runScriptAndLoadHTMLIntoElement(`${env.redirection_path_ai}/run_python_script`, 'content-placeholder')
 
     })
   } catch (err) {

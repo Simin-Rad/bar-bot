@@ -3,8 +3,8 @@
 ## configure .env parameter including the following variables:
 ```bash
 port=
-redirection_path=
-redirection_path2=
+redirection_path_ai=
+redirection_path_upload=
 root_path=
 api_key=
 ```
