@@ -4,6 +4,7 @@
 ```bash
 port=
 redirection_path=
+redirection_path2=
 root_path=
 api_key=
 ```
