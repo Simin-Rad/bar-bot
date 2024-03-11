@@ -15,5 +15,6 @@ npx webpack --config webpack.config.js
 
 # run server
 ```bash
-npm run dev
+npm run upload-server
+npm run ai-server
 ```
