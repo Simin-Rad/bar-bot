@@ -90,6 +90,7 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
 
+        console.log("audio_object_id:", req.query.audio_object_id);
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation

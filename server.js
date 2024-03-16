@@ -46,10 +46,10 @@ async function downloadFile(fileId, filePath) {
     }
 
     try {
-	const filter = { filename: "order_20240313234342.wav" };
-	const coll = client.db(dbName).collection('fs.files');
-	const cursor = coll.find(filter);
-	const result = await cursor.toArray();
+	//const filter = { filename: "order_20240313234342.wav" };
+	//const coll = client.db(dbName).collection('fs.files');
+	//const cursor = coll.find(filter);
+	//const result = await cursor.toArray();
 	//console.log(result)
 
         const db = client.db(dbName);

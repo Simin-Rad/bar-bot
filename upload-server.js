@@ -4,7 +4,7 @@ const { exec } = require('child_process');
 require('dotenv').config();
 
 const path = require('path');
-const handleAudio = require('./audio-handler.js');
+const {handleAudio, handleAudioDB} = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
@@ -46,12 +46,14 @@ app.post('/upload', upload.single('audio'), async (req, res) => {
         callbacks.upload_callback_is_set = false;
 
         // Handle the audio (e.g., save it)
-        handleAudio(audioBlob, req.file.originalname);
+        await handleAudio(audioBlob, req.file.originalname);
+        const obj_id = await handleAudioDB(audioBlob, req.file.originalname);
 
 
         // Send a callback request
         const payload = {
-            success: 'true'
+            success: 'true',
+	    audio_object_id: obj_id
         };
         axios.put(callbacks.upload_callback, payload)
             .then(response => {
