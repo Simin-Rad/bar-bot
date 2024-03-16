@@ -27,7 +27,7 @@ function clearWaitElement(elementID)
   document.getElementById(elementID).innerHTML = "Please wait while AI interprets your order ...";
 }
 
-function runScriptAndLoadHTMLIntoElement(url, elementId) {
+function getAIResutlsAndLoadHTMLIntoElement(url, elementId) {
   fetch(url)
       .then(response => response.text())
       .then(html => {
@@ -118,7 +118,7 @@ async function client() {
         console.error("Error uploading audio:", err);
       }
 
-      runScriptAndLoadHTMLIntoElement(`${env.redirection_path_ai}/run_python_script`, 'content-placeholder')
+      getAIResutlsAndLoadHTMLIntoElement(`${env.redirection_path_ai}/get_ai_results`, 'content-placeholder')
 
     })
   } catch (err) {

@@ -26,18 +26,24 @@ const callbacks = {
     run_callback_is_set: false,
 };
 
-app.get('/run_python_script', async (req, res) => {
-    // Run your Python script when the endpoint is accessed.
+const ai_results = {
+    results: undefined,
+    ai_results_is_set: false,
+};
+
+
+app.get('/get_ai_results', async (req, res) => {
+	while (!ai_results.ai_results_is_set) {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
+        }
+        ai_results.ai_results_is_set = false;
+	ai_results.results = undefined;
+
+	res.send(ai_results.results);
+});
+
+async function run_python_script (audio_object_id){
     try {
-        console.info(`input: ${req}`)
-
-        // Access the headers from the req object
-        const headers = req.headers;
-        // Convert headers to a JSON string with indentation
-        const formattedHeaders = JSON.stringify(headers, null, 2);
-        // Print the headers to the console
-        console.log("Headers:", formattedHeaders);
-
         // Wait for the promise to be resolved before proceeding
         //await callbacks.run_callback_promise.promise;
         while (!callbacks.run_callback_is_set) {
@@ -49,8 +55,11 @@ app.get('/run_python_script', async (req, res) => {
         exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
-                    success: 'false'
+                    success: 'false',
+  		    ai_results: stderr
                 };
+		ai_results.results = stderr
+		ai_results.ai_results_is_set = true
                 axios.put(callbacks.run_callback, payload)
                     .then(response => {
                         console.log('PUT request successful:', response.data);
@@ -59,38 +68,34 @@ app.get('/run_python_script', async (req, res) => {
                         console.error('Error making PUT request:', error.message);
                     });
 
-
-
                 console.error(`Error executing Python script: ${stderr}`);
-                res.status(500).send(`Error executing Python script: ${stderr}`);
                 return;
             }
             console.log('Python script executed successfully');
+	    ai_results.results = stdout
+            ai_results.ai_results_is_set = true
             const payload = {
-                success: 'true'
+                success: 'true',
+		ai_results: ai_results.results
             };
-            axios.put(callbacks.run_callback, payload)
+	    axios.put(callbacks.run_callback, payload)
                 .then(response => {
                     console.log('PUT request successful:', response.data);
                 })
                 .catch(error => {
                     console.error('Error making PUT request:', error.message);
                 });
-
-            res.send(stdout);
-        });
+        }); 	
     } catch (e) {
         console.error(`Error: ${e.message}`);
-        res.status(500).send(`Error: ${e.message}`);
     }
-});
+}
 
-
-app.get('/cpee_interface_run_python_script', (req, res) => {
+app.post('/cpee_interface_run_python_script', async (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
-
-        console.log("audio_object_id:", req.query.audio_object_id);
+	const audio_object_id = req.query.audio_object_id
+        console.log("audio_object_id:", audio_object_id);
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation
@@ -102,9 +107,13 @@ app.get('/cpee_interface_run_python_script', (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
+	await run_python_script (audio_object_id)
+
         var jsonData = {
             "foo": 1,
-            "bar": 2
+            "bar": 2,
+	    "test": 3,
+	    "res": ai_results.results
         };
         res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData)
