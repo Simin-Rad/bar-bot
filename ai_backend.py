@@ -4,6 +4,7 @@ import module_bot_mock
 import os
 import sys
 import configparser
+import time
 
 # instance of "interface_audio". Put sound as input to modul_audio.py and call the modul
 def provide_audio_input_and_get_output(sound):
@@ -26,7 +27,7 @@ def provide_order_input_and_get_output(output_order):
 # this is the public interface to the AI module
 # the client js triggers the whole AI inference
 # by calling this trigger. 
-def trigger():
+def trigger(audio_file_name):
 
     config = configparser.ConfigParser()
     with open('.env', 'r') as f:
@@ -38,8 +39,8 @@ def trigger():
     #print (root_path, file=sys.stderr)
            
     # Create the full path to the selected .wav file
-    wav_file_path = os.path.join (root_path, "uploads/recordedAudio.wav")
-    #print (wav_file_path, file=sys.stderr)
+    wav_file_path = os.path.join (root_path, "downloads/", audio_file_name)
+    print (wav_file_path, file=sys.stderr)
 
     sound = wav_file_path
     output_text_result = provide_audio_input_and_get_output(sound)
@@ -54,4 +55,13 @@ def trigger():
     #print(f"Input: {output_order}, Output: {output_order}")
 
 if __name__ == "__main__":
-    trigger()
+    args = sys.argv
+    audio_file_name = args[1]
+    print ("working on file: " + audio_file_name)
+
+    print ("start")
+    #time.sleep(3)
+    
+    trigger(audio_file_name)
+    print ("done")
+    pass

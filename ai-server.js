@@ -10,6 +10,7 @@ const app = express();
 const hostname = "::";
 const port_ai = process.env.port_ai;
 const redirection_path_ai = process.env.redirection_path_ai
+const redirection_path = process.env.redirection_path
 const root_path = process.env.root_path
 const api_key = process.env.api_key
 
@@ -37,9 +38,10 @@ app.get('/get_ai_results', async (req, res) => {
             await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
         }
         ai_results.ai_results_is_set = false;
+	
+	res.send(ai_results.results);
 	ai_results.results = undefined;
 
-	res.send(ai_results.results);
 });
 
 async function run_python_script (audio_object_id){
@@ -51,8 +53,15 @@ async function run_python_script (audio_object_id){
         }
         callbacks.run_callback_is_set = false;
 
-        // Replace '/path/to/your_script.py' with the actual path to your Python script.
-        exec(`python3 ${root_path}/ai_backend.py`, (error, stdout, stderr) => {
+	const url=`https://lehre.bpm.in.tum.de/${redirection_path}/download/${audio_object_id}`;
+	console.log(url)
+	axios.get(url).then(response => {
+            console.log('GET request successful:');
+	}).catch(error => {
+        	console.error('Error making GET request:', error.message);
+	});
+
+        exec(`python3 ${root_path}/ai_backend.py file_${audio_object_id}.wav`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     success: 'false',
@@ -92,9 +101,8 @@ async function run_python_script (audio_object_id){
 }
 
 app.post('/cpee_interface_run_python_script', async (req, res) => {
-    // Run your Python script when the endpoint is accessed.
     try {
-	const audio_object_id = req.query.audio_object_id
+	const audio_object_id = req.body.audio_object_id
         console.log("audio_object_id:", audio_object_id);
         // Access the headers from the req object
         const headers = req.headers;
