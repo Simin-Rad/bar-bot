@@ -53,7 +53,7 @@ app.post('/put', put.single('audio'), async (req, res) => {
         // Send a callback request
         const payload = {
             success: 'true',
-	    audio_object_id: obj_id
+	        audio_object_id: obj_id
         };
         axios.put(callbacks.put_callback, payload)
             .then(response => {
@@ -88,8 +88,7 @@ app.get('/cpee_interface_put', put.single('audio'), (req, res) => {
         callbacks.put_callback_is_set = true;
 
         var jsonData = {
-            "foo": 1,
-            "bar": 2
+            "put_foo": 1,
         };
         res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData)
@@ -99,9 +98,6 @@ app.get('/cpee_interface_put', put.single('audio'), (req, res) => {
         res.status(500).send(`Error: ${e.message}`);
     }
 });
-
-// Serve static files from the 'public' directory
-//app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port_put, hostname, () => {
     console.info(`port_put: ${port_put}`);

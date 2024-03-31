@@ -115,8 +115,7 @@ app.post('/cpee_interface_run_python_script', async (req, res) => {
 	await run_python_script (audio_object_id)
 
         var jsonData = {
-            "foo": 1,
-            "bar": 2,
+            "ai_foo": 1,
 	    "test": 3,
 	    "res": ai_results.results
         };

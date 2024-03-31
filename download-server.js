@@ -11,11 +11,18 @@ const root_path = process.env.root_path
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+const axios = require('axios');
+
 const fs = require('fs');
 const { MongoClient, ObjectId } = require('mongodb');
 const GridFSBucket = require('mongodb').GridFSBucket;
 const uri = process.env.mongodb_uri;
 const dbName = process.env.db_name;
+
+const callbacks = {
+    download_callback: undefined,
+    download_callback_is_set: false,
+};
 
 // Function to establish connection to MongoDB
 async function connectToDatabase() {
@@ -89,19 +96,94 @@ async function downloadFile(fileId, filePath) {
 
 // Endpoint to trigger file download
 app.get('/download/:id', async (req, res) => {
-    const fileId = req.params.id;
-    const filePath = path.join(__dirname, 'downloads', `file_${fileId}.wav`);
+    if (!req.params.id) {
+        return res.status(400).send('No ID in params');
+    }
     
-    // Call downloadFile function to download the file
-    const downloadSuccess = await downloadFile(fileId, filePath);
+    try {
+        // Log the headers (if needed)
+        const headers = req.headers;
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        console.log("Headers:", formattedHeaders);
 
-    // Check if file was downloaded successfully and send response accordingly
-    if (downloadSuccess) {
-        res.sendFile(filePath);
-    } else {
-        res.status(404).send('File not found.');
+        // Wait for the signal (if needed)
+        while (!callbacks.download_callback_is_set) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        callbacks.download_callback_is_set = false;
+
+        const fileId = req.params.id;
+        const filePath = path.join(__dirname, 'downloads', `file_${fileId}.wav`);
+        
+        // Call downloadFile function to download the file
+        const downloadSuccess = await downloadFile(fileId, filePath);
+
+        // Check if file was downloaded successfully and send response accordingly
+        if (downloadSuccess) {
+            res.sendFile(filePath);
+        } else {
+            res.status(404).send('File not found.');
+        }
+
+        // Send a callback request
+        const payload = {
+            success: 'true',
+	        audio_object_id: fileId 
+        };
+        axios.put(callbacks.download_callback, payload)
+            .then(response => {
+                console.log('download request successful:', response.data);
+            })
+            .catch(error => {
+                console.error('Error making download request:', error.message);
+            });
+        // Respond for successful audio download
+
+        res.json({ message: 'Audio downloaded and saved successfully' });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Server error');
+    }
+
+
+
+
+
+
+
+
+
+    
+});
+
+
+app.get('/cpee_interface_download', async (req, res) => {
+    // Run your Python script when the endpoint is accessed.
+    try {
+
+        // Access the headers from the req object
+        const headers = req.headers;
+        // Convert headers to a JSON string with indentation
+        const formattedHeaders = JSON.stringify(headers, null, 2);
+        // Print the headers to the console
+        console.log("Headers:", formattedHeaders);
+
+        callbacks.download_callback = req.headers['cpee-callback']; // only works from cpee
+        console.log("download_callback:", callbacks.download_callback);
+        callbacks.download_callback_is_set = true;
+
+        var jsonData = {
+            "download_foo": 1,
+        };
+        res.setHeader('CPEE-CALLBACK', 'true');
+        res.send(jsonData)
+
+    } catch (e) {
+        console.error(`Error: ${e.message}`);
+        res.status(500).send(`Error: ${e.message}`);
     }
 });
+
 
 app.listen(port_download, hostname, () => {
     console.info(`port_download: ${port_download}`);
