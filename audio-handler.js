@@ -56,7 +56,7 @@ async function handleAudioDB(audioBlob, originalName) {
         const readableStream = require('stream').Readable.from(audioBlob);
 
         // Create an put stream and put the audio data to GridFS
-        const putStream = bucket.openputStream(originalName);
+        const putStream = bucket.openUploadStream(originalName);
         await new Promise((resolve, reject) => {
             readableStream.pipe(putStream)
                 .on('error', reject)
