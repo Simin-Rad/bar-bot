@@ -125,7 +125,7 @@ app.get('/download/:id', async (req, res) => {
 });
 
 
-app.get('/cpee_interface_download', async (req, res) => {
+app.post('/cpee_interface_download', async (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
         const audio_object_id = req.body.audio_object_id
