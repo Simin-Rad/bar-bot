@@ -130,6 +130,8 @@ app.get('/cpee_interface_download', async (req, res) => {
     try {
         const audio_object_id = req.body.audio_object_id
         console.log("audio_object_id:", audio_object_id);
+        console.log("req.body:", req.body);
+
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation
