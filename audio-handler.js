@@ -9,11 +9,11 @@ const dbName = process.env.db_name;
 
 function handleAudio(audioBlob, originalName) {
     // Define a path to save the audio file
-    const audioPath = path.join(__dirname, 'uploads', originalName);
+    const audioPath = path.join(__dirname, 'puts', originalName);
 
-    // Ensure the 'uploads' directory exists
-    if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
-        fs.mkdirSync(path.join(__dirname, 'uploads'));
+    // Ensure the 'puts' directory exists
+    if (!fs.existsSync(path.join(__dirname, 'puts'))) {
+        fs.mkdirSync(path.join(__dirname, 'puts'));
     }
 
     // Write the audio blob to a file
@@ -55,17 +55,17 @@ async function handleAudioDB(audioBlob, originalName) {
         const bucket = new GridFSBucket(db);
         const readableStream = require('stream').Readable.from(audioBlob);
 
-        // Create an upload stream and upload the audio data to GridFS
-        const uploadStream = bucket.openUploadStream(originalName);
+        // Create an put stream and put the audio data to GridFS
+        const putStream = bucket.openputStream(originalName);
         await new Promise((resolve, reject) => {
-            readableStream.pipe(uploadStream)
+            readableStream.pipe(putStream)
                 .on('error', reject)
                 .on('finish', resolve);
         });
 
-        console.log('Audio file stored in GridFS with file ID:', uploadStream.id);
+        console.log('Audio file stored in GridFS with file ID:', putStream.id);
 
-	return uploadStream.id; 
+	return putStream.id; 
     } catch (error) {
         console.error('Error storing audio file in GridFS:', error);
     } finally {

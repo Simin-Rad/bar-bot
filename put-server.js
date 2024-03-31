@@ -8,8 +8,8 @@ const {handleAudio, handleAudioDB} = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
-const port_upload = process.env.port_upload;
-const redirection_path_upload = process.env.redirection_path_upload
+const port_put = process.env.port_put;
+const redirection_path_put = process.env.redirection_path_put
 const root_path = process.env.root_path
 const api_key = process.env.api_key
 
@@ -19,16 +19,16 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 const axios = require('axios');
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const put = multer({ storage: storage });
 
 const callbacks = {
-    upload_callback: undefined,
-    upload_callback_is_set: false,
+    put_callback: undefined,
+    put_callback_is_set: false,
 };
 
-app.post('/upload', upload.single('audio'), async (req, res) => {
+app.post('/put', put.single('audio'), async (req, res) => {
     if (!req.file) {
-        return res.status(400).send('No audio uploaded');
+        return res.status(400).send('No audio puted');
     }
 
     const audioBlob = req.file.buffer;
@@ -40,10 +40,10 @@ app.post('/upload', upload.single('audio'), async (req, res) => {
         console.log("Headers:", formattedHeaders);
 
         // Wait for the signal (if needed)
-        while (!callbacks.upload_callback_is_set) {
+        while (!callbacks.put_callback_is_set) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        callbacks.upload_callback_is_set = false;
+        callbacks.put_callback_is_set = false;
 
         // Handle the audio (e.g., save it)
         await handleAudio(audioBlob, req.file.originalname);
@@ -55,16 +55,16 @@ app.post('/upload', upload.single('audio'), async (req, res) => {
             success: 'true',
 	    audio_object_id: obj_id
         };
-        axios.put(callbacks.upload_callback, payload)
+        axios.put(callbacks.put_callback, payload)
             .then(response => {
                 console.log('PUT request successful:', response.data);
             })
             .catch(error => {
                 console.error('Error making PUT request:', error.message);
             });
-        // Respond for successful audio upload
+        // Respond for successful audio put
 
-        res.json({ message: 'Audio uploaded and saved successfully' });
+        res.json({ message: 'Audio puted and saved successfully' });
     } catch (err) {
         console.error('Error:', err);
         res.status(500).send('Server error');
@@ -72,7 +72,7 @@ app.post('/upload', upload.single('audio'), async (req, res) => {
 });
 
 
-app.get('/cpee_interface_upload', upload.single('audio'), (req, res) => {
+app.get('/cpee_interface_put', put.single('audio'), (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
 
@@ -83,9 +83,9 @@ app.get('/cpee_interface_upload', upload.single('audio'), (req, res) => {
         // Print the headers to the console
         console.log("Headers:", formattedHeaders);
 
-        callbacks.upload_callback = req.headers['cpee-callback']; // only works from cpee
-        console.log("upload_callback:", callbacks.upload_callback);
-        callbacks.upload_callback_is_set = true;
+        callbacks.put_callback = req.headers['cpee-callback']; // only works from cpee
+        console.log("put_callback:", callbacks.put_callback);
+        callbacks.put_callback_is_set = true;
 
         var jsonData = {
             "foo": 1,
@@ -103,10 +103,10 @@ app.get('/cpee_interface_upload', upload.single('audio'), (req, res) => {
 // Serve static files from the 'public' directory
 //app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port_upload, hostname, () => {
-    console.info(`port_upload: ${port_upload}`);
-    console.info(`redirection_path_upload: ${redirection_path_upload}`);
+app.listen(port_put, hostname, () => {
+    console.info(`port_put: ${port_put}`);
+    console.info(`redirection_path_put: ${redirection_path_put}`);
     console.info(`root_path: ${root_path}`);
     console.info(`api_key: ${api_key}`);
-    console.info(`upload-server running at http://${hostname}:${port_upload}/`);
+    console.info(`put-server running at http://${hostname}:${port_put}/`);
 });

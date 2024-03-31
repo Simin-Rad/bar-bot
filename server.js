@@ -111,7 +111,7 @@ app.get('/download/:id', async (req, res) => {
 
 app.listen(port, hostname, () => {
     console.info(`port: ${port}`);
-    console.info(`redirection_path_upload: ${redirection_path}`);
+    console.info(`redirection_path: ${redirection_path}`);
     console.info(`root_path: ${root_path}`);
-    console.info(`upload-server running at http://${hostname}:${port}/`);
+    console.info(`server running at http://${hostname}:${port}/`);
 });

@@ -4,10 +4,10 @@
     "description": "",
     "main": "client_bundle.js",
     "scripts": {
-        "dev": "npm-run-all --parallel main-server ai-server upload-server",
+        "dev": "npm-run-all --parallel main-server ai-server put-server",
         "main-server": "node server.js",
         "ai-server": "node ai-server.js",
-        "upload-server": "node upload-server.js"
+        "put-server": "node put-server.js"
     },
     "keywords": [],
     "author": "",

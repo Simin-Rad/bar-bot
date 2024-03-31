@@ -4,7 +4,7 @@
 ```bash
 port=
 redirection_path_ai=
-redirection_path_upload=
+redirection_path_put=
 root_path=
 api_key=
 ```
@@ -16,6 +16,6 @@ npx webpack --config webpack.config.js
 
 # run server
 ```bash
-npm run upload-server
+npm run put-server
 npm run ai-server
 ```

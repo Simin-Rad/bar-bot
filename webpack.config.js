@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 const env = dotenv.config().parsed;
 console.log('env.redirection_path:', env.redirection_path);
-console.log('env.redirection_path_upload:', env.redirection_path_upload);
+console.log('env.redirection_path_put:', env.redirection_path_put);
 console.log('env.redirection_path_ai:', env.redirection_path_ai);
 
 // webpack.config.js
@@ -22,7 +22,7 @@ const config1 = {
     plugins: [
         new webpack.DefinePlugin({
             'env.redirection_path': JSON.stringify(env.redirection_path),
-            'env.redirection_path_upload': JSON.stringify(env.redirection_path_upload),
+            'env.redirection_path_put': JSON.stringify(env.redirection_path_put),
             'env.redirection_path_ai': JSON.stringify(env.redirection_path_ai)
 
         })

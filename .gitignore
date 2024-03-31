@@ -1,6 +1,6 @@
 /node_modules/
 /package-lock.json
-uploads
+puts
 __pycache__/
 *bundle.js
 .vscode/

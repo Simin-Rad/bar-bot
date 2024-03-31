@@ -19,9 +19,6 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 
 const axios = require('axios');
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 const callbacks = {
     run_callback: undefined,
     run_callback_is_set: false,

@@ -39,19 +39,19 @@ function getAIResutlsAndLoadHTMLIntoElement(url, elementId) {
       });
 }
 
-async function uploadAudioToServer(blob) {
+async function putAudioToServer(blob) {
   const formData = new FormData();
   formData.append('audio', blob, 'recordedAudio.wav'); // You can specify a filename if needed
 
-  const response = await fetch(`${env.redirection_path_upload}/upload`, {
+  const response = await fetch(`${env.redirection_path_put}/put`, {
       method: 'POST',
       body: formData
   });
 
   if (response.ok) {
-      console.log("Uploaded successfully!");
+      console.log("puted successfully!");
   } else {
-      console.error("Upload failed:", await response.text());
+      console.error("put failed:", await response.text());
   }
 }
 
@@ -111,11 +111,11 @@ async function client() {
 
       audio.src = url
 
-      // Upload the audio blob to the server
+      // put the audio blob to the server
       try {
-        await uploadAudioToServer(blob);
+        await putAudioToServer(blob);
       } catch (err) {
-        console.error("Error uploading audio:", err);
+        console.error("Error puting audio:", err);
       }
 
       getAIResutlsAndLoadHTMLIntoElement(`${env.redirection_path_ai}/get_ai_results`, 'content-placeholder')
