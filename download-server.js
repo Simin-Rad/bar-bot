@@ -152,7 +152,7 @@ app.post('/cpee_interface_download', async (req, res) => {
 
 
         // Call downloadFile function to download the file
-        const downloadSuccess = await downloadFile(fileId, filePath);
+        const downloadSuccess = await downloadFile(audio_object_id, filePath);
 
         // Check if file was downloaded successfully and send response accordingly
         if (downloadSuccess) {
@@ -164,7 +164,7 @@ app.post('/cpee_interface_download', async (req, res) => {
         // Send a callback request
         const payload = {
             success: 'true',
-            audio_object_id: fileId 
+            audio_object_id: audio_object_id 
         };
         axios.put(callbacks.download_callback, payload)
             .then(response => {
