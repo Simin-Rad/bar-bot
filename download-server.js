@@ -128,7 +128,8 @@ app.get('/download/:id', async (req, res) => {
 app.get('/cpee_interface_download', async (req, res) => {
     // Run your Python script when the endpoint is accessed.
     try {
-
+        const audio_object_id = req.body.audio_object_id
+        console.log("audio_object_id:", audio_object_id);
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation
@@ -145,9 +146,7 @@ app.get('/cpee_interface_download', async (req, res) => {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         callbacks.download_callback_is_set = false;
-
-        const fileId = req.params.id;
-        const filePath = path.join(__dirname, 'downloads', `file_${fileId}.wav`);
+        const filePath = path.join(__dirname, 'downloads', `file_${audio_object_id}.wav`);
 
 
         // Call downloadFile function to download the file
