@@ -114,37 +114,6 @@ app.get('/download/:id', async (req, res) => {
         const formattedHeaders = JSON.stringify(headers, null, 2);
         console.log("Headers:", formattedHeaders);
 
-        // Wait for the signal (if needed)
-        while (!callbacks.download_callback_is_set) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        callbacks.download_callback_is_set = false;
-
-        const fileId = req.params.id;
-        const filePath = path.join(__dirname, 'downloads', `file_${fileId}.wav`);
-        
-        // Call downloadFile function to download the file
-        const downloadSuccess = await downloadFile(fileId, filePath);
-
-        // Check if file was downloaded successfully and send response accordingly
-        if (downloadSuccess) {
-            res.sendFile(filePath);
-        } else {
-            res.status(404).send('File not found.');
-        }
-
-        // Send a callback request
-        const payload = {
-            success: 'true',
-	        audio_object_id: fileId 
-        };
-        axios.put(callbacks.download_callback, payload)
-            .then(response => {
-                console.log('download request successful:', response.data);
-            })
-            .catch(error => {
-                console.error('Error making download request:', error.message);
-            });
         // Respond for successful audio download
 
         res.json({ message: 'Audio downloaded and saved successfully' });
@@ -170,6 +139,39 @@ app.get('/cpee_interface_download', async (req, res) => {
         callbacks.download_callback = req.headers['cpee-callback']; // only works from cpee
         console.log("download_callback:", callbacks.download_callback);
         callbacks.download_callback_is_set = true;
+
+        // Wait for the signal (if needed)
+        while (!callbacks.download_callback_is_set) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        callbacks.download_callback_is_set = false;
+
+        const fileId = req.params.id;
+        const filePath = path.join(__dirname, 'downloads', `file_${fileId}.wav`);
+
+
+        // Call downloadFile function to download the file
+        const downloadSuccess = await downloadFile(fileId, filePath);
+
+        // Check if file was downloaded successfully and send response accordingly
+        if (downloadSuccess) {
+            res.sendFile(filePath);
+        } else {
+            res.status(404).send('File not found.');
+        }
+
+        // Send a callback request
+        const payload = {
+            success: 'true',
+            audio_object_id: fileId 
+        };
+        axios.put(callbacks.download_callback, payload)
+            .then(response => {
+                console.log('download request successful:', response.data);
+            })
+            .catch(error => {
+                console.error('Error making download request:', error.message);
+            });
 
         var jsonData = {
             "download_foo": 1,
