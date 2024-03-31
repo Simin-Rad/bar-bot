@@ -50,15 +50,7 @@ async function run_python_script (audio_object_id){
         }
         callbacks.run_callback_is_set = false;
 
-	const url=`https://lehre.bpm.in.tum.de/${redirection_path}/download/${audio_object_id}`;
-	console.log(url)
-	axios.get(url).then(response => {
-            console.log('GET request successful:');
-	}).catch(error => {
-        	console.error('Error making GET request:', error.message);
-	});
-
-        exec(`python3 ${root_path}/ai_backend.py file_${audio_object_id}.wav`, (error, stdout, stderr) => {
+	    exec(`python3 ${root_path}/ai_backend.py file_${audio_object_id}.wav`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     success: 'false',

@@ -84,6 +84,14 @@ async function downloadFile(fileId, filePath) {
             writeStream.on('error', reject);
         });
 
+        const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/download/${fileId}`;
+        console.log(url)
+        axios.get(url).then(response => {
+                console.log('GET request successful:');
+        }).catch(error => {
+                console.error('Error making GET request:', error.message);
+        });
+
         console.log('File downloaded successfully.');
         return true; // Indicate that file was downloaded successfully
     } catch (error) {
@@ -144,16 +152,7 @@ app.get('/download/:id', async (req, res) => {
         console.error('Error:', err);
         res.status(500).send('Server error');
     }
-
-
-
-
-
-
-
-
-
-    
+  
 });
 
 
