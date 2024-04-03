@@ -107,6 +107,7 @@ app.get('/download/:id', async (req, res) => {
     if (!req.params.id) {
         return res.status(400).send('No ID in params');
     }
+    const id = req.params.id;
     
     try {
         // Log the headers (if needed)
@@ -114,6 +115,8 @@ app.get('/download/:id', async (req, res) => {
         const formattedHeaders = JSON.stringify(headers, null, 2);
         console.log("Headers:", formattedHeaders);
 
+        const filePath = path.join(__dirname, 'downloads', `file_${id}.wav`);
+        const downloadSuccess = await downloadFile(id, filePath);
         // Respond for successful audio download
 
         res.json({ message: 'Audio downloaded and saved successfully' });
