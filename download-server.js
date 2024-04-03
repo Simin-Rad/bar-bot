@@ -194,7 +194,22 @@ app.post('/cpee_interface_download', async (req, res) => {
     }
 });
 
-app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
+const downloadsDirectory = path.join(__dirname, 'downloads');
+// Middleware to serve WAV files with appropriate content-type
+app.get('/downloads/:filename', (req, res, next) => {
+    const filePath = path.join(downloadsDirectory, req.params.filename);
+    const stat = fs.statSync(filePath);
+  
+    res.writeHead(200, {
+      'Content-Type': 'audio/x-wav',
+      'Content-Length': stat.size
+    });
+  
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+  });
+
+//app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 
 app.listen(port_download, hostname, () => {
     console.info(`port_download: ${port_download}`);
