@@ -172,8 +172,8 @@ app.post('/cpee_interface_download', async (req, res) => {
         console.log(url)
         // Send a callback request
         const payload = {
-            success: 'true',
-            audio_object_id: audio_object_id,
+            //success: 'true',
+            //audio_object_id: audio_object_id,
             url: url
         };
         axios.put(callbacks.download_callback, payload)

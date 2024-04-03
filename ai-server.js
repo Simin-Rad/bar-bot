@@ -53,8 +53,8 @@ async function run_python_script (audio_object_id){
 	    exec(`python3 ${root_path}/ai_backend.py file_${audio_object_id}.wav`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
-                    success: 'false',
-  		    ai_results: stderr
+                    //success: 'false',
+  		            ai_results: stderr
                 };
 		ai_results.results = stderr
 		ai_results.ai_results_is_set = true

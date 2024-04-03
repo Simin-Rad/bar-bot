@@ -52,7 +52,7 @@ app.post('/put', put.single('audio'), async (req, res) => {
 
         // Send a callback request
         const payload = {
-            success: 'true',
+            //success: 'true',
 	        audio_object_id: obj_id
         };
         axios.put(callbacks.put_callback, payload)
