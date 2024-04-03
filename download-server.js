@@ -166,10 +166,13 @@ app.post('/cpee_interface_download', async (req, res) => {
             res.status(404).send('File not found.');
         }
 
+        const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/downloads/file_${fileId}.wav`;
+        console.log(url)
         // Send a callback request
         const payload = {
             success: 'true',
-            audio_object_id: audio_object_id 
+            audio_object_id: audio_object_id,
+            url: url
         };
         axios.put(callbacks.download_callback, payload)
             .then(response => {
