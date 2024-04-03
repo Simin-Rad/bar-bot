@@ -194,6 +194,7 @@ app.post('/cpee_interface_download', async (req, res) => {
     }
 });
 
+app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 
 app.listen(port_download, hostname, () => {
     console.info(`port_download: ${port_download}`);

@@ -13,7 +13,6 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 
 app.listen(port, hostname, () => {
     console.info(`port: ${port}`);
