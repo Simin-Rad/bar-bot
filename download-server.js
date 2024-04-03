@@ -238,14 +238,14 @@ app.get('/downloads/:filename', (req, res, next) => {
         });
   
         // Support range requests
-        const rangeHeader = req.headers.range ? String(req.headers.range) : '';
+        const rangeHeader = req.headers.range || '';
         const options = {
           total: stat.size,
           parse: true
         };
         const rangeRequest = range(stat.size, rangeHeader, options);
   
-        if (rangeRequest === -1) {
+        if (rangeRequest === -1 || !Array.isArray(rangeRequest)) {
           // Return 416 status code for invalid range requests
           return res.sendStatus(416);
         }
@@ -257,7 +257,8 @@ app.get('/downloads/:filename', (req, res, next) => {
   
         // Return partial content with 206 status code for valid range requests
         res.status(206);
-        fs.createReadStream(filePath, rangeRequest).pipe(res);
+        res.setHeader('Content-Range', `bytes ${rangeRequest[0].start}-${rangeRequest[0].end}/${stat.size}`);
+        fs.createReadStream(filePath, rangeRequest[0]).pipe(res);
       });
     }
   });
