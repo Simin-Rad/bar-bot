@@ -5,8 +5,9 @@ const path = require('path');
 const app = express();
 const hostname = "::";
 const port_download = process.env.port_download;
-const redirection_path_download = process.env.redirection_path_download
-const root_path = process.env.root_path
+const redirection_path_download = process.env.redirection_path_download;
+const root_path = process.env.root_path;
+const range = require('range-parser');
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -18,6 +19,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const GridFSBucket = require('mongodb').GridFSBucket;
 const uri = process.env.mongodb_uri;
 const dbName = process.env.db_name;
+const downloadsDirectory = path.join(__dirname, 'downloads');
 
 const callbacks = {
     download_callback: undefined,
@@ -194,19 +196,69 @@ app.post('/cpee_interface_download', async (req, res) => {
     }
 });
 
-const downloadsDirectory = path.join(__dirname, 'downloads');
 // Middleware to serve WAV files with appropriate content-type
 app.get('/downloads/:filename', (req, res, next) => {
-    const filePath = path.join(downloadsDirectory, req.params.filename);
-    const stat = fs.statSync(filePath);
+    const filename = req.params.filename;
+    const filePath = path.join(downloadsDirectory, filename);
   
-    res.writeHead(200, {
-      'Content-Type': 'audio/x-wav',
-      'Content-Length': stat.size
-    });
+    // If the requested file is a directory, serve directory listing
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+      fs.readdir(filePath, (err, files) => {
+        if (err) {
+          console.error('Error reading directory:', err);
+          return res.status(500).send('Internal Server Error');
+        }
+        const fileList = files.map(file => `<li><a href="/downloads/${filename}/${file}">${file}</a></li>`).join('');
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head><title>Downloads</title></head>
+          <body>
+            <h1>Files in /downloads/${filename}:</h1>
+            <ul>
+              ${fileList}
+            </ul>
+          </body>
+          </html>
+        `;
+        res.send(html);
+      });
+    } else {
+      const contentType = 'audio/x-wav';
   
-    const readStream = fs.createReadStream(filePath);
-    readStream.pipe(res);
+      fs.stat(filePath, (err, stat) => {
+        if (err) {
+          // If file not found, pass control to the next middleware
+          return next();
+        }
+  
+        res.writeHead(200, {
+          'Content-Type': contentType,
+          'Content-Length': stat.size
+        });
+  
+        // Support range requests
+        const options = {
+          total: stat.size,
+          parse: true
+        };
+        const rangeRequest = range(stat.size, req.headers.range, options);
+  
+        if (rangeRequest === -1) {
+          // Return 416 status code for invalid range requests
+          return res.sendStatus(416);
+        }
+  
+        if (rangeRequest === -2 || rangeRequest === -3) {
+          // Return 200 status code for full file request
+          return fs.createReadStream(filePath).pipe(res);
+        }
+  
+        // Return partial content with 206 status code for valid range requests
+        res.status(206);
+        fs.createReadStream(filePath, rangeRequest).pipe(res);
+      });
+    }
   });
 
 //app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
