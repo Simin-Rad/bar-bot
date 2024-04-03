@@ -257,6 +257,7 @@ app.get('/downloads/:filename', (req, res, next) => {
   
         // Return partial content with 206 status code for valid range requests
         res.status(206);
+        res.removeHeader('Content-Disposition'); // Remove Content-Disposition header
         res.setHeader('Content-Range', `bytes ${rangeRequest[0].start}-${rangeRequest[0].end}/${stat.size}`);
         fs.createReadStream(filePath, rangeRequest[0]).pipe(res);
       });
