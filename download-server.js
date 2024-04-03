@@ -196,7 +196,7 @@ app.post('/cpee_interface_download', async (req, res) => {
     }
 });
 
-// Middleware to serve WAV files with appropriate content-type
+// Middleware to serve WAV files with appropriate content-type and support range requests
 app.get('/downloads/:filename', (req, res, next) => {
     const filename = req.params.filename;
     const filePath = path.join(downloadsDirectory, filename);
@@ -238,11 +238,12 @@ app.get('/downloads/:filename', (req, res, next) => {
         });
   
         // Support range requests
+        const rangeHeader = req.headers.range ? String(req.headers.range) : '';
         const options = {
           total: stat.size,
           parse: true
         };
-        const rangeRequest = range(stat.size, req.headers.range, options);
+        const rangeRequest = range(stat.size, rangeHeader, options);
   
         if (rangeRequest === -1) {
           // Return 416 status code for invalid range requests
