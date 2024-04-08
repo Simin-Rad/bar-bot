@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { exec } = require('child_process');
 require('dotenv').config();
+const fs = require('fs');
 
 const path = require('path');
 const handleAudio = require('./audio-handler.js');
