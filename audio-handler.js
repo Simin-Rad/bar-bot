@@ -7,9 +7,9 @@ const GridFSBucket = require('mongodb').GridFSBucket;
 const uri = process.env.mongodb_uri;
 const dbName = process.env.db_name;
 
-function handleAudio(audioBlob, originalName) {
+function handleAudio(audioBlob, fileName) {
     // Define a path to save the audio file
-    const audioPath = path.join(__dirname, 'puts', originalName);
+    const audioPath = path.join(__dirname, 'puts', fileName);
 
     // Ensure the 'puts' directory exists
     if (!fs.existsSync(path.join(__dirname, 'puts'))) {
@@ -43,7 +43,7 @@ async function connectToDatabase() {
 }
 
 
-async function handleAudioDB(audioBlob, originalName) {
+async function handleAudioDB(audioBlob, fileName) {
     const client = await connectToDatabase();
     if (!client) {
         console.error('Failed to connect to MongoDB. Aborting file download.');
@@ -56,7 +56,7 @@ async function handleAudioDB(audioBlob, originalName) {
         const readableStream = require('stream').Readable.from(audioBlob);
 
         // Create an put stream and put the audio data to GridFS
-        const putStream = bucket.openUploadStream(originalName);
+        const putStream = bucket.openUploadStream(fileName);
         await new Promise((resolve, reject) => {
             readableStream.pipe(putStream)
                 .on('error', reject)

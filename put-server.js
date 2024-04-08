@@ -26,12 +26,24 @@ const callbacks = {
     put_callback_is_set: false,
 };
 
+function generateRandom16DigitNumber() {
+    const min = 1000000000000000; // Minimum 16-digit number
+    const max = 9999999999999999; // Maximum 16-digit number
+  
+    // Generate a random number within the specified range
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  
+    return randomNumber.toString();
+  }
+
 app.post('/put', put.single('audio'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No audio puted');
     }
 
     const audioBlob = req.file.buffer;
+    const originalName = req.file.originalname
+    const fileName = generateRandom16DigitNumber () + ".wav";
 
     try {
         // Log the headers (if needed)
@@ -46,14 +58,13 @@ app.post('/put', put.single('audio'), async (req, res) => {
         callbacks.put_callback_is_set = false;
 
         // Handle the audio (e.g., save it)
-        await handleAudio(audioBlob, req.file.originalname);
-        const obj_id = await handleAudioDB(audioBlob, req.file.originalname);
-
+        await handleAudio(audioBlob, fileName);
+        //const obj_id = await handleAudioDB(audioBlob, req.file.originalname);
 
         // Send a callback request
         const payload = {
-            //success: 'true',
-            audio_object_id: obj_id
+            fileName: fileName,
+            url: "null"
         };
         axios.put(callbacks.put_callback, payload)
             .then(response => {
