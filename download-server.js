@@ -224,7 +224,7 @@ app.get('/downloads/:filename', (req, res, next) => {
         res.send(html);
       });
     } else {
-      const contentType = 'audio/wav'; // Set Content-Type to audio/wav
+      const contentType = 'audio/x-wav'; // Set Content-Type to audio/wav
   
       fs.stat(filePath, (err, stat) => {
         if (err) {
