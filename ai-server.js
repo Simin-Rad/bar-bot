@@ -41,7 +41,17 @@ app.get('/get_ai_results', async (req, res) => {
 
 });
 
-async function run_python_script (audio_object_id){
+async function downloadFile(url, outputPath) {
+    try {
+      const response = await axios.get(url, { responseType: 'arraybuffer' });
+      fs.writeFileSync(outputPath, response.data);
+      console.log('File downloaded successfully.');
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  }
+
+async function run_python_script (order_url){
     try {
         // Wait for the promise to be resolved before proceeding
         //await callbacks.run_callback_promise.promise;
@@ -49,8 +59,12 @@ async function run_python_script (audio_object_id){
             await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
         }
         callbacks.run_callback_is_set = false;
+        
+        const outputPath = path.join(__dirname, 'downloads', `input_order.wav`);
 
-	    exec(`python3 ${root_path}/ai_backend.py file_${audio_object_id}.wav`, (error, stdout, stderr) => {
+        await downloadFile (order_url, outputPath)
+
+	    exec(`python3 ${root_path}/ai_backend.py downloads/input_order.wav`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     //success: 'false',
@@ -91,8 +105,10 @@ async function run_python_script (audio_object_id){
 
 app.post('/cpee_interface_run_python_script', async (req, res) => {
     try {
-	const audio_object_id = req.body.audio_object_id
-        console.log("audio_object_id:", audio_object_id);
+	    //const audio_object_id = req.body.audio_object_id
+	    const order_url = req.body.order_url
+
+        console.log("order_url:", order_url);
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation
@@ -104,7 +120,7 @@ app.post('/cpee_interface_run_python_script', async (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-	await run_python_script (audio_object_id)
+	await run_python_script (order_url)
 
         var jsonData = {
             "ai_foo": 1,
