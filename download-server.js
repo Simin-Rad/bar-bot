@@ -187,7 +187,7 @@ app.post('/cpee_interface_download', async (req, res) => {
         var jsonData = {
             "download_foo": 1,
         };
-        res.setHeader('CPEE-CALLBACK', 'true');
+        //res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData)
 
     } catch (e) {
