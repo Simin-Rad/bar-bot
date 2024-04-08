@@ -62,7 +62,7 @@ app.post('/put', put.single('audio'), async (req, res) => {
         await handleAudio(audioBlob, fileName);
         //const obj_id = await handleAudioDB(audioBlob, req.file.originalname);
 
-        const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/downloads/${fileName}`;
+        const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/wavs/${fileName}`;
         console.log(url)
 
         // Send a callback request
