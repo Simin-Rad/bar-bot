@@ -88,9 +88,7 @@ async function run_script(order_url) {
             console.log('script executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
-            const payload = {
-                text: ai_results.results
-            };
+            const payload = JSON.parse(ai_results.results);
             axios.put(callbacks.run_callback, payload)
                 .then(response => {
                     console.log('PUT request successful:', response.data);
