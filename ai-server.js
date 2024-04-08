@@ -104,10 +104,10 @@ async function run_python_script (order_url){
     }
 }
 
-app.post('/cpee_interface_run_python_script', async (req, res) => {
+app.get('/cpee_interface_run_python_script', async (req, res) => {
     try {
 	    //const audio_object_id = req.body.audio_object_id
-	    const order_url = req.body.order_url
+        const order_url = req.query.order_url
 
         console.log("order_url:", order_url);
         // Access the headers from the req object
