@@ -185,10 +185,12 @@ app.post('/cpee_interface_download', async (req, res) => {
                 console.error('Error making download request:', error.message);
             });
 
+        /*
         var jsonData = {
             "download_foo": 1,
         };
         res.send(jsonData)
+        */
 
     } catch (e) {
         console.error(`Error: ${e.message}`);
@@ -264,7 +266,7 @@ app.get('/downloads/:filename', (req, res, next) => {
     }
   });
 
-//app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
+app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 
 app.listen(port_download, hostname, () => {
     console.info(`port_download: ${port_download}`);
