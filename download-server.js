@@ -201,70 +201,19 @@ app.post('/cpee_interface_download', async (req, res) => {
 // Middleware to serve WAV files with appropriate content-type and support range requests
 app.get('/downloads/:filename', (req, res, next) => {
     const filename = req.params.filename;
-    const filePath = path.join(downloadsDirectory, filename);
-  
-    // If the requested file is a directory, serve directory listing
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-      fs.readdir(filePath, (err, files) => {
+    const filePath = path.join(__dirname, 'downloads', filename);
+
+    // Set appropriate content type for WAV files
+    res.set('Content-Type', 'audio/x-wav');
+
+    // Send the file
+    res.sendFile(filePath, (err) => {
         if (err) {
-          console.error('Error reading directory:', err);
-          return res.status(500).send('Internal Server Error');
+            // If there is an error sending the file, pass it to the error handler middleware
+            next(err);
         }
-        const fileList = files.map(file => `<li><a href="/downloads/${filename}/${file}">${file}</a></li>`).join('');
-        const html = `
-          <!DOCTYPE html>
-          <html>
-          <head><title>Downloads</title></head>
-          <body>
-            <h1>Files in /downloads/${filename}:</h1>
-            <ul>
-              ${fileList}
-            </ul>
-          </body>
-          </html>
-        `;
-        res.send(html);
-      });
-    } else {
-      const contentType = 'audio/x-wav'; // Set Content-Type to audio/wav
-  
-      fs.stat(filePath, (err, stat) => {
-        if (err) {
-          // If file not found, pass control to the next middleware
-          return next();
-        }
-  
-        res.writeHead(200, {
-          'Content-Type': contentType,
-          'Content-Length': stat.size
-        });
-  
-        // Support range requests
-        const rangeHeader = req.headers.range || '';
-        const options = {
-          total: stat.size,
-          parse: true
-        };
-        const rangeRequest = range(stat.size, rangeHeader, options);
-  
-        if (rangeRequest === -1 || !Array.isArray(rangeRequest)) {
-          // Return 416 status code for invalid range requests
-          return res.sendStatus(416);
-        }
-  
-        if (rangeRequest === -2 || rangeRequest === -3) {
-          // Return 200 status code for full file request
-          return fs.createReadStream(filePath).pipe(res);
-        }
-  
-        // Return partial content with 206 status code for valid range requests
-        res.status(206);
-        res.removeHeader('Content-Disposition'); // Remove Content-Disposition header
-        res.setHeader('Content-Range', `bytes ${rangeRequest[0].start}-${rangeRequest[0].end}/${stat.size}`);
-        fs.createReadStream(filePath, rangeRequest[0]).pipe(res);
-      });
-    }
-  });
+    });
+});
 
 app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 
