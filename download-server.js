@@ -106,30 +106,6 @@ async function downloadFile(fileId, filePath) {
     }
 }
 
-// Endpoint to trigger file download
-app.get('/download/:id', async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).send('No ID in params');
-    }
-    const id = req.params.id;
-    
-    try {
-        // Log the headers (if needed)
-        const headers = req.headers;
-        const formattedHeaders = JSON.stringify(headers, null, 2);
-        console.log("Headers:", formattedHeaders);
-
-        const filePath = path.join(__dirname, 'downloads', `file_${id}.wav`);
-        const downloadSuccess = await downloadFile(id, filePath);
-        // Respond for successful audio download
-
-        res.json({ message: 'Audio downloaded and saved successfully' });
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).send('Server error');
-    }
-  
-});
 
 
 app.post('/cpee_interface_download', async (req, res) => {
@@ -155,7 +131,7 @@ app.post('/cpee_interface_download', async (req, res) => {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         callbacks.download_callback_is_set = false;
-        const filePath = path.join(__dirname, 'downloads', `file_${audio_object_id}.wav`);
+        const filePath = path.join(__dirname, 'wavs', `file_${audio_object_id}.wav`);
 
 
         // Call downloadFile function to download the file
