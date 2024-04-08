@@ -4,7 +4,7 @@ const { exec } = require('child_process');
 require('dotenv').config();
 
 const path = require('path');
-const {handleAudio, handleAudioDB} = require('./audio-handler.js');
+const { handleAudio, handleAudioDB } = require('./audio-handler.js');
 
 const app = express();
 const hostname = "::";
@@ -53,7 +53,7 @@ app.post('/put', put.single('audio'), async (req, res) => {
         // Send a callback request
         const payload = {
             //success: 'true',
-	        audio_object_id: obj_id
+            audio_object_id: obj_id
         };
         axios.put(callbacks.put_callback, payload)
             .then(response => {
