@@ -61,10 +61,13 @@ app.post('/put', put.single('audio'), async (req, res) => {
         await handleAudio(audioBlob, fileName);
         //const obj_id = await handleAudioDB(audioBlob, req.file.originalname);
 
+        const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/downloads/${fileName}`;
+        console.log(url)
+
         // Send a callback request
         const payload = {
             fileName: fileName,
-            url: "null"
+            url: url
         };
         axios.put(callbacks.put_callback, payload)
             .then(response => {

@@ -201,7 +201,7 @@ app.post('/cpee_interface_download', async (req, res) => {
 // Middleware to serve WAV files with appropriate content-type and support range requests
 app.get('/downloads/:filename', (req, res, next) => {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'downloads', filename);
+    const filePath = path.join(__dirname, 'wavs', filename);
 
     // Set appropriate content type for WAV files
     res.set('Content-Type', 'audio/x-wav');
