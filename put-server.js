@@ -10,6 +10,7 @@ const app = express();
 const hostname = "::";
 const port_put = process.env.port_put;
 const redirection_path_put = process.env.redirection_path_put
+const redirection_path_download = process.env.redirection_path_download
 const root_path = process.env.root_path
 const api_key = process.env.api_key
 
