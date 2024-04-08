@@ -168,6 +168,7 @@ app.post('/cpee_interface_download', async (req, res) => {
             res.status(404).send('File not found.');
         }
 
+        res.setHeader('CPEE-CALLBACK', 'true');
         const url=`https://lehre.bpm.in.tum.de/${redirection_path_download}/downloads/file_${audio_object_id}.wav`;
         console.log(url)
         // Send a callback request
@@ -187,7 +188,6 @@ app.post('/cpee_interface_download', async (req, res) => {
         var jsonData = {
             "download_foo": 1,
         };
-        //res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData)
 
     } catch (e) {
