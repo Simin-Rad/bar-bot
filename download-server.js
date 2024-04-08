@@ -185,12 +185,12 @@ app.post('/cpee_interface_download', async (req, res) => {
                 console.error('Error making download request:', error.message);
             });
 
+            /*
         var jsonData = {
             "download_foo": 1,
         };
-        /*
-        res.send(payload)
         */
+        res.send(payload)
 
     } catch (e) {
         console.error(`Error: ${e.message}`);
