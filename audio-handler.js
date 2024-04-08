@@ -9,11 +9,11 @@ const dbName = process.env.db_name;
 
 function handleAudio(audioBlob, fileName) {
     // Define a path to save the audio file
-    const audioPath = path.join(__dirname, 'puts', fileName);
+    const audioPath = path.join(__dirname, 'wavs', fileName);
 
     // Ensure the 'puts' directory exists
-    if (!fs.existsSync(path.join(__dirname, 'puts'))) {
-        fs.mkdirSync(path.join(__dirname, 'puts'));
+    if (!fs.existsSync(path.join(__dirname, 'wavs'))) {
+        fs.mkdirSync(path.join(__dirname, 'wavs'));
     }
 
     // Write the audio blob to a file

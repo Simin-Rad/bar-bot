@@ -1,6 +1,7 @@
 /node_modules/
 /package-lock.json
 puts
+wavs
 __pycache__/
 *bundle.js
 .vscode/
