@@ -15,7 +15,7 @@ import json
 def interface_audio(sound):
 
     r = sr.Recognizer()
-    json_text = ""
+    json_text = {"text": "null"}
     with sr.AudioFile (sound) as source:
         r.adjust_for_ambient_noise(source)
         print("Converting Audio_to_text", file=sys.stderr)
