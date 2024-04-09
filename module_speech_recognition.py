@@ -29,6 +29,7 @@ def interface_audio(sound):
             
         except:
             print('Sorry, please try again!', file=sys.stderr)
+            print(json_text, file=sys.stdout)
 
     return json_text
 
