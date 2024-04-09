@@ -148,7 +148,7 @@ async function run_script_py_speech_recognition(order_url) {
 
         await downloadFile(order_url, outputPath)
 
-        exec(`python3 ${root_path}/ai_backend.py downloads/input_order.wav`, (error, stdout, stderr) => {
+        exec(`python3 ${root_path}/ai_backend.py ${outputPath}`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     //success: 'false',

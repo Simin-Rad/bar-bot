@@ -39,7 +39,7 @@ def trigger(audio_file_name):
     #print (root_path, file=sys.stderr)
            
     # Create the full path to the selected .wav file
-    wav_file_path = os.path.join (root_path, "downloads/", audio_file_name)
+    wav_file_path = os.path.join (root_path, audio_file_name)
     print (wav_file_path, file=sys.stderr)
 
     sound = wav_file_path
