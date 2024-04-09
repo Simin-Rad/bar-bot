@@ -44,8 +44,9 @@ def trigger(audio_file_name):
 
     sound = wav_file_path
     output_text_result = provide_audio_input_and_get_output(sound)
-    #print(f"Input: {sound}, Output: {output_text_result}")
+    print(f"Input: {sound}, Output: {output_text_result}", file=sys.stderr)
 
+    '''
     output_order = provide_text_input_and_get_output(output_text_result)
     print("-----", file=sys.stderr)
     print(f"Input: {output_text_result}, Output: {output_order}", file=sys.stderr)
@@ -53,15 +54,16 @@ def trigger(audio_file_name):
 
     provide_order_input_and_get_output(output_order)
     #print(f"Input: {output_order}, Output: {output_order}")
+    '''
 
 if __name__ == "__main__":
     args = sys.argv
     audio_file_name = args[1]
-    print ("working on file: " + audio_file_name)
+    print ("working on file: " + audio_file_name, file=sys.stderr)
 
-    print ("start")
+    print ("start", file=sys.stderr)
     #time.sleep(3)
     
     trigger(audio_file_name)
-    print ("done")
+    print ("done", file=sys.stderr)
     pass

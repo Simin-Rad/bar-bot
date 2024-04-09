@@ -9,12 +9,13 @@ import speech_recognition as sr
 import sys
 import os
 import configparser
+import json
 
 
 def interface_audio(sound):
 
     r = sr.Recognizer()
-    text = ""
+    json_text = ""
     with sr.AudioFile (sound) as source:
         r.adjust_for_ambient_noise(source)
         print("Converting Audio_to_text", file=sys.stderr)
@@ -22,12 +23,14 @@ def interface_audio(sound):
 
         try:
             text = r.recognize_google(audio)
-            print(text, file=sys.stderr)
+            data = {"text": text}
+            json_text = json.dumps(data)
+            print(json_text, file=sys.stdout)
             
         except:
             print('Sorry, please try again!', file=sys.stderr)
 
-    return text
+    return json_text
 
 if __name__ == "__main__":    
     config = configparser.ConfigParser()
