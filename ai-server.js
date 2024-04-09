@@ -67,6 +67,7 @@ async function run_script(order_url) {
 
         //exec(`python3 ${root_path}/ai_backend.py downloads/input_order.wav`, (error, stdout, stderr) => 
         exec(`voice2json transcribe-wav downloads/input_order.wav`, (error, stdout, stderr) => {
+        //exec(`echo '{"hi": "hi"}'`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     //success: 'false',
