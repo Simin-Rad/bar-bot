@@ -29,7 +29,7 @@ def interface_audio(sound):
             
         except:
             print('Sorry, please try again!', file=sys.stderr)
-            data = {"text": "null"}
+            data = {"text": ""}
             json_text = json.dumps(data)
             print(json_text, file=sys.stdout)
 
