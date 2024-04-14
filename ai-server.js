@@ -248,6 +248,7 @@ async function run_script_ai_order_detection(ordertext) {
             console.log('script executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
+            console.log(ai_results.results)
             const payload = JSON.parse(ai_results.results);
             console.log(payload)
             axios.put(callbacks.run_callback, payload)
