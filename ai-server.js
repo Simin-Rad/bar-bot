@@ -245,7 +245,7 @@ async function run_script_ai_order_detection(ordertext) {
                 console.error(`Error executing script: ${stderr}`);
                 return stderr;
             }
-            console.log('script222 executed successfully');
+            console.log('script executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
             console.log("ai_results.results", ai_results.results)
@@ -270,6 +270,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         //const audio_object_id = req.body.audio_object_id
         const ordertext = req.query.ordertext
 
+        console.log("req.query:", req.query.);    
         console.log("ordertext:", ordertext);
         // Access the headers from the req object
         const headers = req.headers;
