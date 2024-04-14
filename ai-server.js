@@ -243,7 +243,7 @@ async function run_script_ai_order_detection(ordertext) {
                     });
 
                 console.error(`Error executing script: ${stderr}`);
-                return;
+                return stderr;
             }
             console.log('script executed successfully');
             ai_results.results = stdout
@@ -257,6 +257,7 @@ async function run_script_ai_order_detection(ordertext) {
                 .catch(error => {
                     console.error('Error making PUT request:', error.message);
                 });
+            return payload;
         });
     } catch (e) {
         console.error(`Error: ${e.message}`);
