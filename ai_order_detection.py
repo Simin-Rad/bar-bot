@@ -38,8 +38,10 @@ def trigger(ordertext):
     print(f"{output_order}", file=sys.stdout)
     print("-----", file=sys.stderr)
 
+    '''
     provide_order_input_and_get_output(output_order)
     print(f"Input: {output_order}, Output: {output_order}")
+    '''
 
 if __name__ == "__main__":
     args = sys.argv
