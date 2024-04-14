@@ -270,7 +270,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         //const audio_object_id = req.body.audio_object_id
         const ordertext = req.query.ordertext
 
-        console.log("req.query:", req.query.);    
+        console.log("req.query:", req.query);    
         console.log("ordertext:", ordertext);
         // Access the headers from the req object
         const headers = req.headers;
