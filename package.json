@@ -4,9 +4,10 @@
     "description": "",
     "main": "client_bundle.js",
     "scripts": {
-        "dev": "npm-run-all --parallel main-server ai-server put-server download-server",
+        "dev": "npm-run-all --parallel main-server order-detection-server ai-server put-server download-server",
         "main-server": "node server.js",
         "ai-server": "node ai-server.js",
+        "order-detection-server": "node order-detection.js",
         "put-server": "node put-server.js",
         "download-server": "node download-server.js"
     },

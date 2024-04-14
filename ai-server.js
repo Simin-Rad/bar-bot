@@ -30,18 +30,6 @@ const ai_results = {
     ai_results_is_set: false,
 };
 
-
-app.get('/get_ai_results', async (req, res) => {
-    while (!ai_results.ai_results_is_set) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
-    }
-    ai_results.ai_results_is_set = false;
-
-    res.send(ai_results.results);
-    ai_results.results = undefined;
-
-});
-
 async function downloadFile(url, outputPath) {
     try {
         const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -216,90 +204,6 @@ app.get('/cpee_interface_py_speech_recognition', async (req, res) => {
         res.status(500).send(`Error: ${e.message}`);
     }
 });
-
-async function run_script_ai_order_detection(ordertext) {
-    try {
-        // Wait for the promise to be resolved before proceeding
-        //await callbacks.run_callback_promise.promise;
-        while (!callbacks.run_callback_is_set) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
-        }
-        callbacks.run_callback_is_set = false;
-
-        exec(`python3 ${root_path}/ai_order_detection.py ${ordertext}`, (error, stdout, stderr) => {
-            if (error) {
-                const payload = {
-                    //success: 'false',
-                    ai_results: stderr
-                };
-                ai_results.results = stderr
-                ai_results.ai_results_is_set = true
-                axios.put(callbacks.run_callback, payload)
-                    .then(response => {
-                        console.log('PUT request successful:', response.data);
-                    })
-                    .catch(error => {
-                        console.error('Error making PUT request:', error.message);
-                    });
-
-                console.error(`Error executing script: ${stderr}`);
-                return stderr;
-            }
-            console.log('script executed successfully');
-            ai_results.results = stdout
-            ai_results.ai_results_is_set = true
-            console.log("ai_results.results", ai_results.results)
-            const payload = JSON.parse(ai_results.results);
-            console.log("payload", payload)
-            axios.put(callbacks.run_callback, payload)
-                .then(response => {
-                    console.log('PUT request successful:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error making PUT request:', error.message);
-                });
-            return payload;
-        });
-    } catch (e) {
-        console.error(`Error: ${e.message}`);
-    }
-}
-
-app.get('/cpee_interface_order_detection', async (req, res) => {
-    try {
-        //const audio_object_id = req.body.audio_object_id
-        const ordertext = req.query.ordertext
-
-        console.log("ordertext:", ordertext);
-        // Access the headers from the req object
-        const headers = req.headers;
-        // Convert headers to a JSON string with indentation
-        const formattedHeaders = JSON.stringify(headers, null, 2);
-        // Print the headers to the console
-        console.log("Headers:", formattedHeaders);
-
-        callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
-        console.log("run_callback:", callbacks.run_callback);
-        callbacks.run_callback_is_set = true;
-
-        const payload = await run_script_ai_order_detection(ordertext)
-        console.log("payload:", payload);
-        var jsonData = {
-            "ai_foo": 1,
-            "test": 3,
-            "res": payload
-        };
-        res.setHeader('CPEE-CALLBACK', 'true');
-        res.send(jsonData)
-
-    } catch (e) {
-        console.error(`Error: ${e.message}`);
-        res.status(500).send(`Error: ${e.message}`);
-    }
-});
-
-// Serve static files from the 'public' directory
-//app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port_ai, hostname, () => {
     console.info(`port_ai: ${port_ai}`);
