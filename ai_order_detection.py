@@ -17,7 +17,7 @@ def provide_audio_input_and_get_output(sound):
 def provide_text_input_and_get_output(output_text_result):
     # Call the process_input function from my_module
     output_text = module_openai.interface_openai(output_text_result)
-    tmp_data = {'text': output_text_result}
+    tmp_data = {'text': output_text}
     output_text = json.dumps(tmp_data)
     return output_text
 
