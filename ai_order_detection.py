@@ -5,6 +5,7 @@ import os
 import sys
 import configparser
 import time
+import json
 
 # instance of "interface_audio". Put sound as input to modul_audio.py and call the modul
 def provide_audio_input_and_get_output(sound):
@@ -15,7 +16,9 @@ def provide_audio_input_and_get_output(sound):
 # instance of "interface_openai". Put output_text_result as input to modul_ai.py and call the modul
 def provide_text_input_and_get_output(output_text_result):
     # Call the process_input function from my_module
-    output_text = module_openai.interface_openai(output_text_result)
+    #output_text = module_openai.interface_openai(output_text_result)
+    tmp_data = {'text': output_text_result}
+    output_text = json.dumps(tmp_data)
     return output_text
 
 # instance of "interface_bot_mock". Put output_order as input to modul_bot_mock.py and call the modul
@@ -32,10 +35,13 @@ def trigger(ordertext):
     output_order = provide_text_input_and_get_output(ordertext)
     print("-----", file=sys.stderr)
     print(f"Input: {ordertext}, Output: {output_order}", file=sys.stderr)
+    print(f"{output_order}", file=sys.stdout)
     print("-----", file=sys.stderr)
 
+    '''
     provide_order_input_and_get_output(output_order)
     print(f"Input: {output_order}, Output: {output_order}")
+    '''
 
 if __name__ == "__main__":
     args = sys.argv
