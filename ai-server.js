@@ -170,7 +170,6 @@ async function run_script_py_speech_recognition(order_url) {
             console.log('script executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
-            console.log(stdout)
             const payload = JSON.parse(ai_results.results);
             axios.put(callbacks.run_callback, payload)
                 .then(response => {
@@ -249,6 +248,7 @@ async function run_script_ai_order_detection(ordertext) {
             console.log('script executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
+            console.log(stdout)
             const payload = JSON.parse(ai_results.results);
             axios.put(callbacks.run_callback, payload)
                 .then(response => {
