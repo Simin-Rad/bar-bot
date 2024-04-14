@@ -245,7 +245,7 @@ async function run_script_ai_order_detection(ordertext) {
                 console.error(`Error executing script: ${stderr}`);
                 return stderr;
             }
-            console.log('script executed successfully');
+            console.log('script222 executed successfully');
             ai_results.results = stdout
             ai_results.ai_results_is_set = true
             console.log("ai_results.results", ai_results.results)
