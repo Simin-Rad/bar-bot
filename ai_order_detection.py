@@ -17,14 +17,14 @@ def provide_audio_input_and_get_output(sound):
 def provide_text_input_and_get_output(output_text_result):
     # Call the process_input function from my_module
     output_text = module_openai.interface_openai(output_text_result)
-    tmp_data = {'text': output_text}
-    output_text = json.dumps(tmp_data)
     return output_text
 
 # instance of "interface_bot_mock". Put output_order as input to modul_bot_mock.py and call the modul
 def provide_order_input_and_get_output(output_order):
     # Call the process_input function from my_module
     output_text = module_bot_mock.interface_bot_mock(output_order)
+    tmp_data = {'text': output_text}
+    output_text = json.dumps(tmp_data)
     return output_text
 
 # this is the public interface to the AI module
@@ -38,10 +38,8 @@ def trigger(ordertext):
     print(f"{output_order}", file=sys.stdout)
     print("-----", file=sys.stderr)
 
-    '''
     provide_order_input_and_get_output(output_order)
     print(f"Input: {output_order}, Output: {output_order}")
-    '''
 
 if __name__ == "__main__":
     args = sys.argv
