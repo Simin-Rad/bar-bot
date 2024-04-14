@@ -118,7 +118,7 @@ async function client() {
         console.error("Error puting audio:", err);
       }
 
-      getAIResutlsAndLoadHTMLIntoElement(`${env.redirection_path_ai}/get_ai_results`, 'content-placeholder')
+      getAIResutlsAndLoadHTMLIntoElement(`${env.redirection_path_order_detection}/get_ai_results`, 'content-placeholder')
 
     })
   } catch (err) {
