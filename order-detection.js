@@ -75,7 +75,13 @@ async function run_script_ai_order_detection(ordertext) {
                 } else {
                     console.log('script executed successfully');
                     ai_results.results = stdout;
-                    const payload = JSON.parse(ai_results.results);
+                    let payload;
+                    try {
+                        payload = JSON.parse(ai_results.results);
+                    } catch (parseError) {
+                        console.error(`Error parsing JSON: ${parseError.message}`);
+                        payload = { error: 'Failed to parse JSON' };
+                    }
                     ai_results.payload = payload;
                     ai_results.ai_results_is_set = true;
                     axios.put(callbacks.run_callback, payload)
