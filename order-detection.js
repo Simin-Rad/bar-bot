@@ -79,6 +79,7 @@ async function run_script_ai_order_detection(ordertext) {
                         payload = JSON.parse(ai_results.results);
                     } catch (parseError) {
                         console.error(`Error parsing JSON: ${parseError.message}`);
+                        ai_results.results = "Sorry, I did not catch your order, please repeat again!";
                         payload = {"name":"", "size":"","number":""}
                     }
                     ai_results.payload = payload;
