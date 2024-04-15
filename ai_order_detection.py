@@ -33,11 +33,11 @@ def provide_order_input_and_get_output(output_order):
 def trigger(ordertext):
 
     output_order = provide_text_input_and_get_output(ordertext)
-    print("-----", file=sys.stderr)
-    print(f"Input: {ordertext}", file=sys.stderr)
-    print(f"Output: {output_order}", file=sys.stderr)
+    #print("-----", file=sys.stderr)
+    #print(f"Input: {ordertext}", file=sys.stderr)
+    #print(f"Output: {output_order}", file=sys.stderr)
     print(f"{output_order}", file=sys.stdout)
-    print("-----", file=sys.stderr)
+    #print("-----", file=sys.stderr)
 
     '''
     provide_order_input_and_get_output(output_order)
