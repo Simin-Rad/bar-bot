@@ -45,83 +45,79 @@ app.get('/get_ai_results', async (req, res) => {
 async function run_script_ai_order_detection(ordertext) {
     try {
         // Wait for the promise to be resolved before proceeding
-        //await callbacks.run_callback_promise.promise;
         while (!callbacks.run_callback_is_set) {
-            new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
+            await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
         }
         callbacks.run_callback_is_set = false;
 
         console.log("ordertext", ordertext);
 
-        exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
-            if (error) {
-                const payload = {
-                    //success: 'false',
-                    ai_results: stderr
-                };
-                ai_results.results = stderr
-                ai_results.payload = results
-                ai_results.ai_results_is_set = true
-                axios.put(callbacks.run_callback, payload)
-                    .then(response => {
-                        console.log('PUT request successful:', response.data);
-                    })
-                    .catch(error => {
-                        console.error('Error making PUT request:', error.message);
-                    });
+        return new Promise((resolve, reject) => {
+            exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
+                if (error) {
+                    const payload = {
+                        //success: 'false',
+                        ai_results: stderr
+                    };
+                    ai_results.results = stderr;
+                    ai_results.payload = results;
+                    ai_results.ai_results_is_set = true;
+                    axios.put(callbacks.run_callback, payload)
+                        .then(response => {
+                            console.log('PUT request successful:', response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error making PUT request:', error.message);
+                        });
 
-                console.error(`Error executing script: ${stderr}`);
-            }
-            console.log('script executed successfully');
-            ai_results.results = stdout
-            const payload = JSON.parse(ai_results.results);
-            ai_results.ai_results_is_set = true
-            //console.log("ai_results.results", ai_results.results)
-            ai_results.payload = payload
-            //console.log("payload", payload)
-            axios.put(callbacks.run_callback, payload)
-                .then(response => {
-                    console.log('PUT request successful:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error making PUT request:', error.message);
-                });
+                    console.error(`Error executing script: ${stderr}`);
+                    reject(error);
+                } else {
+                    console.log('script executed successfully');
+                    ai_results.results = stdout;
+                    const payload = JSON.parse(ai_results.results);
+                    ai_results.payload = payload;
+                    ai_results.ai_results_is_set = true;
+                    axios.put(callbacks.run_callback, payload)
+                        .then(response => {
+                            console.log('PUT request successful:', response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error making PUT request:', error.message);
+                        });
+                    resolve(stdout);
+                }
+            });
         });
-        return ai_results.results;
     } catch (e) {
         console.error(`Error: ${e.message}`);
+        throw e;
     }
 }
 
 app.get('/cpee_interface_order_detection', async (req, res) => {
     try {
-        //const audio_object_id = req.body.audio_object_id
-        const ordertext = req.query.ordertext
+        const ordertext = req.query.ordertext;
 
         console.log("ordertext interface:", ordertext);
-        // Access the headers from the req object
         const headers = req.headers;
-        // Convert headers to a JSON string with indentation
-        const formattedHeaders = JSON.stringify(headers, null, 2);
-        // Print the headers to the console
-        console.log("Headers:", formattedHeaders);
+        console.log("Headers:", JSON.stringify(headers, null, 2));
 
-        callbacks.run_callback = req.headers['cpee-callback']; // only works from cpee
+        callbacks.run_callback = req.headers['cpee-callback'];
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-        const results = await run_script_ai_order_detection(ordertext)
-        console.log("ai_results.results", ai_results.results)
-        console.log("ai_results.payload", ai_results.payload)
+        const results = await run_script_ai_order_detection(ordertext);
+        console.log("ai_results.results", ai_results.results);
+        console.log("ai_results.payload", ai_results.payload);
 
-        //console.log("payload:", payload);
         var jsonData = {
             "ai_foo": 1,
             "test": 3,
             "res": 4
         };
         res.setHeader('CPEE-CALLBACK', 'true');
-        res.send(jsonData)
+        res.send(jsonData);
 
     } catch (e) {
         console.error(`Error: ${e.message}`);
