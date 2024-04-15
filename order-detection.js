@@ -112,9 +112,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         console.log("ai_results.payload", ai_results.payload);
 
         var jsonData = {
-            "ai_foo": 1,
-            "test": 3,
-            "res": 4
+            "res": ai_results.payload
         };
         res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData);
