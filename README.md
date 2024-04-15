@@ -236,3 +236,6 @@ Following figure illustrates an overview of the endpoints used in the CPEE model
     - In CPEE, navigate to `Data Elements` and locate `data_order`. This data element includes a URL for accessing the recorded audio file served by the backend. You can access the audio file by copying the URL and opening it in your browser to play.
     - The converted audio to text is also accessible in `ordertext`.
     - If you have set the data element "enable_openai_order_detection" to `true`, then the detected `order` will be placed in `Data Elements` in the form of `{"name":"drink name", "size":"size", "number":"number of drinks"}`.
+
+<img src="./pictures/water.png" alt="Image Alt Text" style="border: 1px solid black; padding: 5px;">
+
