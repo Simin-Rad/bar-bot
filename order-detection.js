@@ -40,7 +40,6 @@ app.get('/get_ai_results', async (req, res) => {
 
     res.send(ai_results.results);
     ai_results.results = undefined;
-
 });
 
 async function run_script_ai_order_detection(ordertext) {
@@ -100,7 +99,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         //const audio_object_id = req.body.audio_object_id
         const ordertext = req.query.ordertext
 
-        console.log("ordertext:", ordertext);
+        console.log("ordertext interface:", ordertext);
         // Access the headers from the req object
         const headers = req.headers;
         // Convert headers to a JSON string with indentation
