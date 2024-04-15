@@ -53,7 +53,7 @@ async function run_script_ai_order_detection(ordertext) {
 
         console.log("ordertext", ordertext);
 
-        exec(`python3 ${root_path}/ai_order_detection.py ${ordertext}`, (error, stdout, stderr) => {
+        exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
             if (error) {
                 const payload = {
                     //success: 'false',
