@@ -42,12 +42,12 @@ app.get('/get_ai_results', async (req, res) => {
 
 });
 
-async function run_script_ai_order_detection(ordertext) {
+function run_script_ai_order_detection(ordertext) {
     try {
         // Wait for the promise to be resolved before proceeding
         //await callbacks.run_callback_promise.promise;
         while (!callbacks.run_callback_is_set) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
+            new Promise(resolve => setTimeout(resolve, 100)); // Introduce a small delay
         }
         callbacks.run_callback_is_set = false;
 
@@ -109,7 +109,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-        const payload = await run_script_ai_order_detection(ordertext)
+        const payload = run_script_ai_order_detection(ordertext)
         console.log("payload:", payload);
         var jsonData = {
             "ai_foo": 1,
