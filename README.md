@@ -49,7 +49,7 @@ npx webpack --config webpack.config.js
 ```
 
 ### Deployment on [`lehre.bpm.in.tum.de`](https://lehre.bpm.in.tum.de)
- configure parameters inside the `.env` including the following server ports, redirection paths and other variables (I provide an example of configurations that are currently used):
+Configure parameters inside the `.env` including the following server ports, redirection paths and other variables (I provide an example of configurations that are currently used).
 
 - set the ports
 ```bash
@@ -83,7 +83,7 @@ to run the servers, execute the following command.
 npm run dev
 ```
 
-This internally triggers all the forntend and backend servers see [`package.json`](./package.json):
+This internally triggers all the forntend and backend servers see [`package.json`](./package.json). Currently, I am running this in a screen session on the `lehre` server.
 
 ## Implementation (what is where)
 The codes can be structured in the following categories. I list the files in each category and provide a short description of what each file does. 
@@ -143,7 +143,7 @@ Project documentation
 ```
 
 ## Overview of the workflow (CPEE model)
-In CPEE, I've created a graph with four service calls with scripts. When the user speaks his order on the webpage, the first service call receives the audio. The services labeled 'Transform Audio to Text Py Speech Recognition' or 'Transform Audio to Text Voice2JSON' utilize the audio URL as input to convert the audio to text. Finally, the 'Order Detection' service uses this text as input to detect the order details. 
+In CPEE, I've created a graph with four service calls with scripts. When the user speaks his order on the webpage, the first service call receives the audio. The services labeled 'Transform Audio to Text Py Speech Recognition' or 'Transform Audio to Text Voice2JSON' utilize the audio URL as input to convert the audio to text. Finally, as a bonus, the 'Order Detection' service uses this text as input to detect the order details. 
 The graph consists of a loop, allowing users to place orders consecutively. Additionally, I've incorporated two decision points. The first decision offers the CPEE user two options for selecting the API to convert audio to text. The second decision involves detecting the order details. However, since I am using a paid service from OpenAI (for the API) token specifically for this functionality, I've implemented a bypassing path. If the token payment is not renewed, this step/feature can be skipped.
 
 <img src="./pictures/graph.png" alt="Image Alt Text" style="border: 1px solid black; padding: 5px;">
