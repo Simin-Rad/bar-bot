@@ -27,7 +27,8 @@ const callbacks = {
 
 const ai_results = {
     results: undefined,
-    ai_results_is_set: false,
+    payload: undefined,
+    ai_results_is_set: false
 };
 
 
@@ -60,6 +61,7 @@ function run_script_ai_order_detection(ordertext) {
                     ai_results: stderr
                 };
                 ai_results.results = stderr
+                ai_results.payload = results
                 ai_results.ai_results_is_set = true
                 axios.put(callbacks.run_callback, payload)
                     .then(response => {
@@ -70,13 +72,14 @@ function run_script_ai_order_detection(ordertext) {
                     });
 
                 console.error(`Error executing script: ${stderr}`);
-                return stderr;
+                return;
             }
             console.log('script executed successfully');
             ai_results.results = stdout
+            const payload = JSON.parse(ai_results.results);
             ai_results.ai_results_is_set = true
             console.log("ai_results.results", ai_results.results)
-            const payload = JSON.parse(ai_results.results);
+            ai_results.payload = payload
             //console.log("payload", payload)
             axios.put(callbacks.run_callback, payload)
                 .then(response => {
@@ -85,7 +88,7 @@ function run_script_ai_order_detection(ordertext) {
                 .catch(error => {
                     console.error('Error making PUT request:', error.message);
                 });
-            return payload;
+            return;
         });
     } catch (e) {
         console.error(`Error: ${e.message}`);
