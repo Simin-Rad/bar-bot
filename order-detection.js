@@ -56,7 +56,7 @@ async function run_script_ai_order_detection(ordertext) {
             exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
                 if (error) {
                     const payload = {
-                        ai_results: stdout
+                        ai_results: "Sorry, I did not catch your order, please repeat again!"
                     };
                     ai_results.results = stdout;
                     ai_results.payload = results;
