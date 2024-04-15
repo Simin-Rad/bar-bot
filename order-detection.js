@@ -56,10 +56,9 @@ async function run_script_ai_order_detection(ordertext) {
             exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
                 if (error) {
                     const payload = {
-                        //success: 'false',
-                        ai_results: stderr
+                        ai_results: stdout
                     };
-                    ai_results.results = stderr;
+                    ai_results.results = stdout;
                     ai_results.payload = results;
                     ai_results.ai_results_is_set = true;
                     axios.put(callbacks.run_callback, payload)
