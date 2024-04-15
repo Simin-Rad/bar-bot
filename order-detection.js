@@ -71,7 +71,6 @@ async function run_script_ai_order_detection(ordertext) {
                     });
 
                 console.error(`Error executing script: ${stderr}`);
-                return;
             }
             console.log('script executed successfully');
             ai_results.results = stdout
@@ -87,8 +86,8 @@ async function run_script_ai_order_detection(ordertext) {
                 .catch(error => {
                     console.error('Error making PUT request:', error.message);
                 });
-            return;
         });
+        return ai_results.results;
     } catch (e) {
         console.error(`Error: ${e.message}`);
     }
@@ -111,7 +110,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-        await run_script_ai_order_detection(ordertext)
+        const results = await run_script_ai_order_detection(ordertext)
         console.log("ai_results.results", ai_results.results)
         console.log("ai_results.payload", ai_results.payload)
 
