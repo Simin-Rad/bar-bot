@@ -4,7 +4,7 @@
 
 ## Overview of Bartender Robot
 This is the documentation for the **Bartender Robot** app, that I developed for my practical course. It uses [CPEE](https://cpee.org) as the workflow engine to manage services associated with a smart bar tender. 
-User goes to the webpage and speaks out his order, using `Start` and `Stop` button. The webpage correlates with CPEE.
+User goes to the webpage and speaks out his order, using `Start` and `Stop` button.
 
 After speaking out the order on the webpage, the user can access CPEE, where the following information is available:
 1. The URL link of the audio
