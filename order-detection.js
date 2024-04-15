@@ -43,7 +43,7 @@ app.get('/get_ai_results', async (req, res) => {
 
 });
 
-function run_script_ai_order_detection(ordertext) {
+async function run_script_ai_order_detection(ordertext) {
     try {
         // Wait for the promise to be resolved before proceeding
         //await callbacks.run_callback_promise.promise;
@@ -112,7 +112,7 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-        run_script_ai_order_detection(ordertext)
+        await run_script_ai_order_detection(ordertext)
         console.log("ai_results.results", ai_results.results)
         console.log("ai_results.payload", ai_results.payload)
 
