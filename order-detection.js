@@ -56,9 +56,9 @@ async function run_script_ai_order_detection(ordertext) {
             exec(`python3 ${root_path}/ai_order_detection.py "${ordertext}"`, (error, stdout, stderr) => {
                 if (error) {
                     const payload = {
-                        ai_results: "Sorry, I did not catch your order, please repeat again!"
+                        ai_results: stdout
                     };
-                    ai_results.results = "Sorry, I did not catch your order, please repeat again!";
+                    ai_results.results = stdout;
                     ai_results.payload = {"name":"", "size":"","number":""}
                     ai_results.ai_results_is_set = true;
                     axios.put(callbacks.run_callback, payload)
@@ -77,12 +77,12 @@ async function run_script_ai_order_detection(ordertext) {
                     let payload;
                     try {
                         payload = JSON.parse(ai_results.results);
+                        ai_results.payload = payload;
                     } catch (parseError) {
                         console.error(`Error parsing JSON: ${parseError.message}`);
                         ai_results.results = "Sorry, I did not catch your order, please repeat again!";
                         payload = {"name":"", "size":"","number":""}
                     }
-                    ai_results.payload = payload;
                     ai_results.ai_results_is_set = true;
                     axios.put(callbacks.run_callback, payload)
                         .then(response => {
