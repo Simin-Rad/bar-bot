@@ -110,11 +110,11 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         callbacks.run_callback_is_set = true;
 
         const payload = run_script_ai_order_detection(ordertext)
-        console.log("payload:", payload);
+        //console.log("payload:", payload);
         var jsonData = {
             "ai_foo": 1,
             "test": 3,
-            "res": payload
+            "res": 4
         };
         res.setHeader('CPEE-CALLBACK', 'true');
         res.send(jsonData)
