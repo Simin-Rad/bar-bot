@@ -78,7 +78,7 @@ function run_script_ai_order_detection(ordertext) {
             ai_results.results = stdout
             const payload = JSON.parse(ai_results.results);
             ai_results.ai_results_is_set = true
-            console.log("ai_results.results", ai_results.results)
+            //console.log("ai_results.results", ai_results.results)
             ai_results.payload = payload
             //console.log("payload", payload)
             axios.put(callbacks.run_callback, payload)
@@ -112,7 +112,10 @@ app.get('/cpee_interface_order_detection', async (req, res) => {
         console.log("run_callback:", callbacks.run_callback);
         callbacks.run_callback_is_set = true;
 
-        const payload = run_script_ai_order_detection(ordertext)
+        run_script_ai_order_detection(ordertext)
+        console.log("ai_results.results", ai_results.results)
+        console.log("ai_results.payload", ai_results.payload)
+
         //console.log("payload:", payload);
         var jsonData = {
             "ai_foo": 1,
