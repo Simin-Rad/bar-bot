@@ -5,9 +5,6 @@
 ## Overview of Bartender Robot
 This is the documentation for the **Bartender Robot** app, that I developed for my practical course. It uses [CPEE](https://cpee.org) as the workflow engine to manage services associated with a smart bar tender. 
 User goes to the webpage and speaks out his order, using `Start` and `Stop` button. The webpage correlates with CPEE.
-It has two components:
-- Rule Engine: A Flask application that allows users to input regex rules with an associated end date.
-- Discord Fetcher: Monitors orders channel of the discord server, processes orders, and matches them against existing rules based on the rule's regex pattern and end date.
 
 After speaking out the order on the webpage, the user can access CPEE, where the following information is available:
 1. The URL link of the audio
